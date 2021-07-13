@@ -1,4 +1,4 @@
-# Cl-Dnn - CL-DNN - Implementation of Deep Neural Networks using Common Lisp
+# Cl-DNN - Implementation of Deep Neural Networks using Common Lisp
 
 ## Usage
 
