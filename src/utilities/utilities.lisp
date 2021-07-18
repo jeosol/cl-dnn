@@ -39,7 +39,16 @@
         (setf sum 0.0)
         (dotimes (k (num-cols a))
           (incf sum (* (aref a i k) (aref b k j))))
-        (setf (aref c i j) sum)))))
+        (setf (aref c i j) sum)))
+    c))
+
+(defun matrix-matrix-add (a b)
+  "Returns c = a + b"
+  (let* ( (c (make-array (list (num-rows a) (num-cols b)) :element-type single-float)))
+    (dotimes (i (num-rows a))
+      (dotimes (j (num-cols a))
+        (setf (aref c i j) (+ (aref a i j) (aref b i j)))))
+    c))
 
 (defun vector-vector-dot-product (a b)
   "Returns the sum of the products of components in vectors a and b"
