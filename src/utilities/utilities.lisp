@@ -32,7 +32,7 @@
 
 (defun matrix-matrix-dot-product (a b)
   "C = A*B"
-  (let* ((c (make-array '(list (num-rows a) (num-cols b)) :element-type single-float))
+  (let* ((c (make-array (list (num-rows a) (num-cols b)) :element-type 'single-float))
          (sum 0.0))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols b))
