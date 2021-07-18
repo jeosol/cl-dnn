@@ -30,6 +30,22 @@
         (setf (aref arr i j) (* (random 1.0) scale))))
     arr))
 
+(defun matrix-matrix-dot-product (a b)
+  "C = A*B"
+  (let* ((c (make-array '(list (num-rows a) (num-cols b)) :element-type single-float))
+         (sum 0.0))
+    (dotimes (i (num-rows a))
+      (dotimes (j (num-cols b))
+        (setf sum 0.0)
+        (dotimes (k (num-cols a))
+          (incf sum (* (aref a i k) (aref b k j))))
+        (setf (aref c i j) sum)))))
+
+(defun vector-vector-dot-product (a b)
+  "Returns the sum of the products of components in vectors a and b"
+  (loop :for ai :across a :for bi :across b :summing (* ai bi) :into sum
+        :finally (return sum)))
+
 (defun layer-sizes (X, Y, &optional (n-h 4))
   "Arguments:
    X -- input dataset of shape (input size, number of examples)
