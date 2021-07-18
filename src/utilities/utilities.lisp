@@ -24,10 +24,11 @@
   (floor (+ min (* (- max min) (rand)))))
 
 (defun make-random-array (num-rows num-cols &optional (scale 1.0))
-  (let* ((arr (make-array (list num-rows num-cols) :element-type :single-float)))
+  (let* ((arr (make-array (list num-rows num-cols) :element-type 'single-float)))
     (dotimes (i num-rows)
       (dotimes (j num-cols)
-        (setf (aref arr i j) (random))))))
+        (setf (aref arr i j) (* (random 1.0) scale))))
+    arr))
 
 (defun layer-sizes (X, Y, &optional (n-h 4))
   "Arguments:
