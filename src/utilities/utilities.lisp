@@ -43,3 +43,27 @@
         (n-y (num-rows Y)))
     (assert (= (num-cols X) (= num-cols Y) nil "Different number of samples in X and Y.")))
   (values n-x n-h n-y))
+
+(defun initialize-parameters-one-hidden-layer (n-x n-h n-y)
+  "
+  Arguments:
+  n-x -- size of the input layer
+  n-h -- size of the hidden layer
+  n-y -- size of the output layer
+ 
+  Returns:
+  parameters -- hashmap containing the weight and bias parameters
+                W1 -- weight matrix of shape (n-h, n-x)
+                b1 -- bias vector of shape (n-h, 1)
+                W2 -- weight matrix of shape (n-y, n-h)
+                b2 -- bias vector of shape (n-y, 1)"
+  (let* ((w1 (make-random-array n-h n-x 0.01))
+         (b1 (make-random-array n-h 1))
+         (w2 (make-random-array n-y n-h 0.01))
+         (b2 (make-random-array n-y 1))
+         (parameters (make-hash-table :size 4 :test #'equal)))
+    (setf (gethash "w1" parameters) w1
+          (gethash "b1" parameters) b1
+          (gethash "w2" parameters) w2
+          (gethash "b2" parameters) b2)
+    parameters))
