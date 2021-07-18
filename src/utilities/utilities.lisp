@@ -12,6 +12,23 @@
   "Returns the number of rows in matrix X."
   (nth 1 (array-dimensions X)))
 
+(defun rand ()
+  (random 1.0))
+
+(defun rand-double (&optional (min 0) (max 1.0))
+  (declare (type number min max))
+  (+ min (* (- max min) (rand))))
+
+(defun rand-int (&optional (min 0) (max 1))
+  (declare (type number min max))
+  (floor (+ min (* (- max min) (rand)))))
+
+(defun make-random-array (num-rows num-cols &optional (scale 1.0))
+  (let* ((arr (make-array (list num-rows num-cols) :element-type :single-float)))
+    (dotimes (i num-rows)
+      (dotimes (j num-cols)
+        (setf (aref arr i j) (random))))))
+
 (defun layer-sizes (X, Y, &optional (n-h 4))
   "Arguments:
    X -- input dataset of shape (input size, number of examples)
