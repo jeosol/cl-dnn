@@ -62,7 +62,7 @@
         (setf (aref arr i j) (* (random 1.0) scale))))
     arr))
 
-(defun matrix-matrix-dot-product (a b)
+(defun matrix-matrix-multiply (a b)
   "C = A*B"
   (let* ((c (make-array (list (num-rows a) (num-cols b)) :element-type 'single-float))
          (sum 0.0))
