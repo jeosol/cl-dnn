@@ -192,3 +192,70 @@
           (gethash "w2" parameters) w2
           (gethash "b2" parameters) b2)
     parameters))
+
+;;; FORWARD PROPAGATION
+(defun forward-propagation-one-hidden-layer (x, parameters
+                                             &optional (activation-functions '(#'tanh-activation
+                                                                               #'sigmoid-activation)))
+  "Performs forward propagation
+  Argument:
+  X -- input data of size (n-x, m)
+  parameters - hashtable containing weight and bias matrices.
+
+  Returns:
+  A2 -- The sigmoid output of the second activation
+  cache -- a hashmap containing z1, a1, z2, and a2"
+  (let* ((w1 (gethash "w1" parameters))
+         (b1 (gethash "b1" parameters))
+         (w2 (gethash "w2" parameters))
+         (b1 (gethash "b1" parameters))
+         (z1 (matrix-matrix-sum (matrix-matrix-multiply w1 x) b1))
+         (a1 (funcall (nth 0 activation-functions) z1))
+         (z2 (matrix-matrix-sum (matrix-matrix-multiply w2 a1) b2))
+         (a2 (funcall (nth 1 activation-functions) z2))
+         (cache (make-hash-table :test 'equal)))
+    (setf (gethash "z1" cache) z1
+          (gethash "a1" cache) a1
+          (gethash "z2" cache) z2
+          (gethash "a2" cache) a2)
+    a2 cache))
+
+(defun compute-cost-one-hidden-layer (a2 y)
+  "Computes the cross-entropy cost
+   Arguments:
+   A2 -- The sigmoid output of the scond activation of shape (1, number of examples)
+   Y  -- 'True' labels vector of shape (1, number of examples)
+
+   Returns:
+   Cost -- cross-entropy"
+  (let* ((m (num-cols y))
+         (sum 0.0))
+    (dotimes (i m)
+      (incf sum (+ (* (aref y 0 i) (log (aref a2 0 i)))
+                   (* (- 1.0 (aref y 0 i)) (log (- 1.0 (aref a2 0 i)))))))
+    (* (/ 1.0 m) sum)))
+
+(defun backward-propagation-one-hidden-layer (parameters cache x y)
+  "Implements the backward propagation algorithm
+
+   Arguments:
+   parameters - hashmap containing the weights and biases
+   cache - hashtable containing z1, a1, z2, a2
+   x - input data of shape(nx, number of examples)
+   y - true labels vector of shape (1, number of exapmles)
+
+   Returns:
+   grads - hashtable containing gradients with respect to different parameters
+  "
+  (let* ((m (num-cols x))
+         (w1 (gethash "w1" parameters))
+         (w2 (gethash "w2" parameters))
+         (a1 (gethash "a1" cache))
+         (a2 (gethash "a2" cache))
+         ;; backward propagation to calculate dw1, dw2, db1, db2, dz1, dz2
+         (dz2 (matrix-matrix-subtract a2 y))
+         (dw2 (matrix-scalar-multiply (matrix-matrix-multiply dz2 (transpose-matrix a1 mmatrix-t)) (/ 1.0 m)))
+         (db2 (matrix-scalar-multiply (matrix-row-sum dz2) (/ 1.0 m)))
+         (dz1 (matrix-matrix-multiply (transpose-matrix w2) dz2))
+         ))
+  )
