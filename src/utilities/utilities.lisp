@@ -105,6 +105,14 @@
         (setf (aref c j i) (aref a i j))))
     c))
 
+(defun matrix-row-sum (a)
+  "Sums the elements on each row of matrix a"
+  (let* ((c (make-array (list (num-rows a) 1) :element-type 'single-float :initial-element 0.0)))
+    (dotimes (i (num-rows a))
+      (dotimes (j (num-cols a))
+        (incf (aref c i 0) (aref a i j))))
+    c))
+
 (defun vector-vector-dot-product (a b)
   "Returns the sum of the products of components in vectors a and b"
   (loop :for ai :across a :for bi :across b :summing (* ai bi) :into sum
