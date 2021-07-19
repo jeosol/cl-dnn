@@ -99,7 +99,16 @@
   (let* ((c (make-array (list (num-rows matrix-a) (num-cols matrix-a)) :element-type 'single-float)))
     (dotimes (i (num-rows matrix-a))
       (dotimes (j (num-rows matrix-a))
-        (setf (aref c i j) (* scalar (aref matrix-a i j)))))))
+        (setf (aref c i j) (* scalar (aref matrix-a i j)))))
+    c))
+
+(defun matrix-power (matrix-a power)
+  "Computes the elements of matrix MATRIX-A raised to power POWER"
+  (let* ((c (make-array (list (num-rows matrix-a) (num-cols matrix-a)) :element-type 'single-float)))
+    (dotimes (i (num-rows matrix-a))
+      (dotimes (j (num-rows matrix-a))
+        (setf (aref c i j) (expt (aref matrix-a i j) power))))
+    c))
 
 (defun transpose-matrix (a)
   "Returns the transpose of matrix A"
