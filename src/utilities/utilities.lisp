@@ -303,3 +303,27 @@
           (gethash "w2" parameters) w2
           (gethash "b2" parameters) b2)
     parameters))
+
+;;; Neural network model with one hidden layer
+(defun nn-model-one-hidden-layer (x y n-h &optional (num-iterations 10000) (print-cost nil))
+  "
+  Arguments:
+  X -- dataset of shape (n_x, number of examples) (n_x dimension of each sample)
+  Y -- labels of shape (1, number of examples
+  n-h -- number of units in hiden layer
+  num-iterations -- number of iterations in gradient descent loop
+  print-cost -- if T, print the cost every 1000 iterations"
+  (let* (dummy n-x n-y parameters a2 cache cost grads) 
+    (setf (values n-x dummy n-y) (layer-sizes x y n-h))
+    ;; Initialize parameters
+    (setf parameters (initialize-parameters-one-hidden-layer n-x n-h n-y))
+    ;; Loop for gradient descent
+    (loop :for i from 0 :below num-iterations
+          :do
+             (setf (values a2 cache) (forward-propagation-one-hidden-layer x parameters))
+             (setf cost (compute-cost-one-hidden-layer a2 y))
+             (setf grads (backward-propagation-one-hidden-layer parameters cache x y))
+             (setf parameters (update-parameters parameters grads))
+             (when (and print-cost (zerop (mod i 1000)))
+               (format t "~&Cost after iteration ~d: ~18,12f" i cost)))
+    parameters))
