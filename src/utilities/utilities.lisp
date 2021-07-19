@@ -76,10 +76,18 @@
 
 (defun matrix-matrix-add (a b)
   "Returns c = a + b"
-  (let* ( (c (make-array (list (num-rows a) (num-cols b)) :element-type single-float)))
+  (let* ( (c (make-array (list (num-rows a) (num-cols b)) :element-type 'single-float)))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
         (setf (aref c i j) (+ (aref a i j) (aref b i j)))))
+    c))
+
+(defun matrix-matrix-subtract (a b)
+  "Returns c = a - b"
+  (let* ( (c (make-array (list (num-rows a) (num-cols b)) :element-type 'single-float)))
+    (dotimes (i (num-rows a))
+      (dotimes (j (num-cols a))
+        (setf (aref c i j) (- (aref a i j) (aref b i j)))))
     c))
 
 (defun vector-vector-dot-product (a b)
