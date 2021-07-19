@@ -91,10 +91,19 @@
     c))
 
 (defun matrix-scalar-multiply (matrix-a scalar)
+  "Returns c = a*scalar - multiplies the elements of matrix a by SCALAR"
   (let* ((c (make-array (list (num-rows matrix-a) (num-cols matrix-a)) :element-type 'single-float)))
     (dotimes (i (num-rows matrix-a))
       (dotimes (j (num-rows matrix-a))
         (setf (aref c i j) (* scalar (aref matrix-a i j)))))))
+
+(defun transpose-matrix (a)
+  "Returns the transpose of matrix A"
+  (let* ((c (make-array (list (num-cols a) (num-rows a)) :element-type 'single-float)))
+    (dotimes (i (num-rows a))
+      (dotimes (j (num-cols a))
+        (setf (aref c j i) (aref a i j))))
+    c))
 
 (defun vector-vector-dot-product (a b)
   "Returns the sum of the products of components in vectors a and b"
