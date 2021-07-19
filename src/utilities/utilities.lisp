@@ -5,11 +5,15 @@
 
 (in-package :src/utilities/utilities)
 
+(defun make-matrix (num-rows num-cols)
+  "Simple function to create a matrix of size NUM-ROWS by NUM-COLS"
+  (make-array (list num-rows num-cols) :element-type 'single-float :initial-element 0.0))
+
 (defun tanh-activation (arr)
   "Implements the hyperbolic tangent (tanh) function"
   (let* ((rows (num-rows arr))
          (cols (num-cols arr))
-         (new-arr (make-array (list rows cols) :element-type 'single-float)))
+         (new-arr (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
         (setf (aref new-arr i j) (/ (- (exp (aref arr i j)) (exp (- (aref arr i j))))
@@ -20,7 +24,7 @@
   "Implements the rectified linear unit (relu) function."
   (let* ((rows (num-rows arr))
          (cols (num-cols arr))
-         (new-arr (make-array (list rows cols) :element-type 'single-float)))
+         (new-arr (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
         (setf (aref new-arr i j) (if (< (aref arr i j) 0.0) 0.0 (aref arr i j)))))
@@ -30,7 +34,7 @@
   "Implements the logistic/sigmoid function"
   (let* ((rows (num-rows arr))
          (cols (num-cols arr))
-         (new-arr (make-array (list rows cols) :element-type 'single-float)))
+         (new-arr (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
         (setf (aref new-arr i j) (/ 1 (+ 1 (exp (- (aref arr i j))))))))
@@ -55,12 +59,8 @@
   (declare (type number min max))
   (floor (+ min (* (- max min) (rand)))))
 
-(defun make-matrix (num-rows num-cols)
-  "Simple function to create a matrix of size NUM-ROWS by NUM-COLS"
-  (make-array (list num-rows num-cols) :element-type 'single-float :initial-element 0.0))
-
 (defun make-random-array (num-rows num-cols &optional (scale 1.0))
-  (let* ((arr (make-array (list num-rows num-cols) :element-type 'single-float)))
+  (let* ((arr (make-matrix num-rows numcols)))
     (dotimes (i num-rows)
       (dotimes (j num-cols)
         (setf (aref arr i j) (* (random 1.0) scale))))
@@ -68,7 +68,7 @@
 
 (defun matrix-matrix-multiply (a b)
   "C = A*B"
-  (let* ((c (make-array (list (num-rows a) (num-cols b)) :element-type 'single-float))
+  (let* ((c (make-matrix (num-rows a) (num-cols b)))
          (sum 0.0))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols b))
@@ -88,7 +88,7 @@
 
 (defun matrix-matrix-add (a b)
   "Returns c = a + b"
-  (let* ( (c (make-array (list (num-rows a) (num-cols b)) :element-type 'single-float)))
+  (let* ( (c (make-marix (num-rows a) (num-cols a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
         (setf (aref c i j) (+ (aref a i j) (aref b i j)))))
@@ -96,7 +96,7 @@
 
 (defun matrix-matrix-subtract (a b)
   "Returns c = a - b"
-  (let* ( (c (make-array (list (num-rows a) (num-cols b)) :element-type 'single-float)))
+  (let* ( (c (make-matrix (num-rows a) (num-cols a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
         (setf (aref c i j) (- (aref a i j) (aref b i j)))))
@@ -104,7 +104,7 @@
 
 (defun scalar-matrix-subtract (scalar matrix)
   "Computes a new matrix with elements c[i,j] = 1 - matrix[i,j]"
-  (let* ((c (make-array (list (num-rows matrix) (num-cols matrix)) :element-type 'single-float)))
+  (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
     (dotimes (i (num-rows matrix))
       (dotimes (j (num-rows matrix))
         (setf (aref c i j) (- scalar (aref matrix i j)))))
@@ -120,7 +120,7 @@
 
 (defun matrix-power (matrix-a power)
   "Computes the elements of matrix MATRIX-A raised to power POWER"
-  (let* ((c (make-array (list (num-rows matrix-a) (num-cols matrix-a)) :element-type 'single-float)))
+  (let* ((c (make-matrix (num-rows matrix-a) (num-cols matrix-a))))
     (dotimes (i (num-rows matrix-a))
       (dotimes (j (num-rows matrix-a))
         (setf (aref c i j) (expt (aref matrix-a i j) power))))
@@ -128,7 +128,7 @@
 
 (defun transpose-matrix (a)
   "Returns the transpose of matrix A"
-  (let* ((c (make-array (list (num-cols a) (num-rows a)) :element-type 'single-float)))
+  (let* ((c (make-matrix (num-cols a) (num-rows b))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
         (setf (aref c j i) (aref a i j))))
@@ -136,7 +136,7 @@
 
 (defun matrix-row-sum (a)
   "Sums the elements on each row of matrix a"
-  (let* ((c (make-array (list (num-rows a) 1) :element-type 'single-float :initial-element 0.0)))
+  (let* ((c (make-matrix (num-rows a) 1)))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
         (incf (aref c i 0) (aref a i j))))
@@ -144,7 +144,7 @@
 
 (defun matrix-col-sum (a)
   "Sums the elements on each column of matrix a"
-  (let* ((c (make-array (list (num-cols a) 1) :element-type 'single-float :initial-element 0.0)))
+  (let* ((c (make-matrix (num-cols a) 1)))
     (dotimes (j (num-cols a))
       (dotimes (i (num-rows a))
         (incf (aref c j 0) (aref a i j))))
