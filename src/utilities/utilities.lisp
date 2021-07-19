@@ -1,8 +1,40 @@
 (uiop/package:define-package :src/utilities/utilities
     (:use :cl)
+  (:nicknames :cl-dnn-utilities)
   (:export #:layer-sizes))
 
 (in-package :src/utilities/utilities)
+
+(defun tanh-activation (arr)
+  "Implements the hyperbolic tangent (tanh) function"
+  (let* ((rows (num-rows arr))
+         (cols (num-cols arr))
+         (new-arr (make-array (list rows cols) :element-type 'single-float)))
+    (dotimes (i rows)
+      (dotimes (j cols)
+        (setf (aref new-arr i j) (/ (- (exp (aref arr i j)) (exp (- (aref arr i j))))
+                                      (+ (exp (aref arr i j)) (exp (- (aref arr i j))))))))
+    new-arr))
+
+(defun relu-activation (arr)
+  "Implements the rectified linear unit (relu) function."
+  (let* ((rows (num-rows arr))
+         (cols (num-cols arr))
+         (new-arr (make-array (list rows cols) :element-type 'single-float)))
+    (dotimes (i rows)
+      (dotimes (j cols)
+        (setf (aref new-arr i j) (if (< (aref arr i j) 0.0) 0.0 (aref arr i j)))))
+    new-arr))
+
+(defun sigmoid-activation (arr)
+  "Implements the logistic/sigmoid function"
+  (let* ((rows (num-rows arr))
+         (cols (num-cols arr))
+         (new-arr (make-array (list rows cols) :element-type 'single-float)))
+    (dotimes (i rows)
+      (dotimes (j cols)
+        (setf (aref new-arr i j) (/ 1 (+ 1 (exp (- (aref arr i j))))))))
+    new-arr))
 
 (defun num-rows (X)
   "Returns the number of rows in matrix X."
