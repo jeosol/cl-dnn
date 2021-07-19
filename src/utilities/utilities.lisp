@@ -155,7 +155,7 @@
   (loop :for ai :across a :for bi :across b :summing (* ai bi) :into sum
         :finally (return sum)))
 
-(defun layer-sizes (X, Y, &optional (n-h 4))
+(defun layer-sizes (x y &optional (n-h 4))
   "Arguments:
    X -- input dataset of shape (input size, number of examples)
    Y -- labels of shape (output size, number of examples
@@ -164,11 +164,14 @@
    n-x -- the size of the input layer
    n-h -- the size of the hidden layer
    n-y -- the size of the output layer"
-  (let ((n-x (num-rows X))
-        (n-y (num-rows Y)))
-    (assert (= (num-cols X) (= num-cols Y) nil "Different number of samples in X and Y.")))
+  (let ((n-x (num-rows x))
+        (n-y (num-rows y)))
+    (assert (= (num-cols x) (= num-cols y) nil "Different number of samples in X and Y.")))
   (values n-x n-h n-y))
 
+;;; TODO:
+;;; Change the uniform random function for the weight matrices to
+;;; normalized random function 
 (defun initialize-parameters-one-hidden-layer (n-x n-h n-y)
   "
   Arguments:
@@ -194,7 +197,7 @@
     parameters))
 
 ;;; FORWARD PROPAGATION
-(defun forward-propagation-one-hidden-layer (x, parameters
+(defun forward-propagation-one-hidden-layer (x parameters
                                              &optional (activation-functions '(#'tanh-activation
                                                                                #'sigmoid-activation)))
   "Performs forward propagation
@@ -270,7 +273,7 @@
     grads))
 
 ;;; Update parameters using gradient descent procedure
-(defun update-parameters (parameters grads &optional (learning-rate = 1.2))
+(defun update-parameters (parameters grads &optional (learning-rate 1.2))
   "Update parameters using the gradient descent update rule given above
 
    Arguments:
