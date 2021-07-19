@@ -273,7 +273,7 @@
     grads))
 
 ;;; Update parameters using gradient descent procedure
-(defun update-parameters (parameters grads &optional (learning-rate 1.2))
+(defun update-parameters-one-hidden-layer (parameters grads &optional (learning-rate 1.2))
   "Update parameters using the gradient descent update rule given above
 
    Arguments:
