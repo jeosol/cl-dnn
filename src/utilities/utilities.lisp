@@ -94,9 +94,17 @@
         (setf (aref c i j) (- (aref a i j) (aref b i j)))))
     c))
 
+(defun scalar-matrix-subtract (scalar matrix)
+  "Computes a new matrix with elements c[i,j] = 1 - matrix[i,j]"
+  (let* ((c (make-array (list (num-rows matrix) (num-cols matrix)) :element-type 'single-float)))
+    (dotimes (i (num-rows matrix))
+      (dotimes (j (num-rows matrix))
+        (setf (aref c i j) (- scalar (aref matrix i j)))))
+    c))
+
 (defun matrix-scalar-multiply (matrix-a scalar)
   "Returns c = a*scalar - multiplies the elements of matrix a by SCALAR"
-  (let* ((c (make-array (list (num-rows matrix-a) (num-cols matrix-a)) :element-type 'single-float)))
+  (let* ((c (make-matrix (num-rows matrix-a) (num-cols matrix-a))))
     (dotimes (i (num-rows matrix-a))
       (dotimes (j (num-rows matrix-a))
         (setf (aref c i j) (* scalar (aref matrix-a i j)))))
