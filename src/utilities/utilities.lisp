@@ -90,6 +90,12 @@
         (setf (aref c i j) (- (aref a i j) (aref b i j)))))
     c))
 
+(defun matrix-scalar-multiply (matrix-a scalar)
+  (let* ((c (make-array (list (num-rows matrix-a) (num-cols matrix-a)) :element-type 'single-float)))
+    (dotimes (i (num-rows matrix-a))
+      (dotimes (j (num-rows matrix-a))
+        (setf (aref c i j) (* scalar (aref matrix-a i j)))))))
+
 (defun vector-vector-dot-product (a b)
   "Returns the sum of the products of components in vectors a and b"
   (loop :for ai :across a :for bi :across b :summing (* ai bi) :into sum
