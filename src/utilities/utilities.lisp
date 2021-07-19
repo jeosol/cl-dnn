@@ -251,25 +251,26 @@
    grads - hashtable containing gradients with respect to different parameters
   "
   (let* ((m (num-cols x))
-         (w1 (gethash "w1" parameters))
+         ;;(w1 (gethash "w1" parameters))
          (w2 (gethash "w2" parameters))
          (a1 (gethash "a1" cache))
          (a2 (gethash "a2" cache))
          ;; backward propagation to calculate dw1, dw2, db1, db2, dz1, dz2
          (dz2 (matrix-matrix-subtract a2 y))
-         (dw2 (matrix-scalar-multiply (matrix-matrix-multiply dz2 (transpose-matrix a1 mmatrix-t)) (/ 1.0 m)))
+         (dw2 (matrix-scalar-multiply (matrix-matrix-multiply dz2 (transpose-matrix a1)) (/ 1.0 m)))
          (db2 (matrix-scalar-multiply (matrix-row-sum dz2) (/ 1.0 m)))
          (dz1 (matrix-matrix-elementwise-multiply (matrix-matrix-multiply (transpose-matrix w2) dz2)
                                                   (scalar-matrix-subtract 1.0 (matrix-power a1 2.0))))
          (dw1 (matrix-scalar-multiply (matrix-matrix-multiple dz1 (transpose-matrix x))
                                       (/ 1.0 m)))
-         (db2 (matrix-scalar-multiply (matrix-row-sum dz1) (/ 1.0 m)))
+         (db1 (matrix-scalar-multiply (matrix-row-sum dz1) (/ 1.0 m)))
          (grads (make-hash-table :test 'equal)))
+    ;; update the gradients hashtable
     (setf (gethash "dw1" grads) dw1
           (gethash "db1" grads) db1
           (gethash "dw2" grads) dw2
           (gethash "db2" grads) db2)
-
+    ;; return gradients hashtable
     grads))
 
 ;;; Update parameters using gradient descent procedure
@@ -318,12 +319,12 @@
     ;; Initialize parameters
     (setf parameters (initialize-parameters-one-hidden-layer n-x n-h n-y))
     ;; Loop for gradient descent
-    (loop :for i from 0 :below num-iterations
-          :do
+    (loop :for i from 0 :below num-iterations :do
              (setf (values a2 cache) (forward-propagation-one-hidden-layer x parameters))
              (setf cost (compute-cost-one-hidden-layer a2 y))
              (setf grads (backward-propagation-one-hidden-layer parameters cache x y))
              (setf parameters (update-parameters parameters grads))
              (when (and print-cost (zerop (mod i 1000)))
                (format t "~&Cost after iteration ~d: ~18,12f" i cost)))
+    ;; Return final parameters
     parameters))
