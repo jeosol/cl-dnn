@@ -256,6 +256,47 @@
          (dz2 (matrix-matrix-subtract a2 y))
          (dw2 (matrix-scalar-multiply (matrix-matrix-multiply dz2 (transpose-matrix a1 mmatrix-t)) (/ 1.0 m)))
          (db2 (matrix-scalar-multiply (matrix-row-sum dz2) (/ 1.0 m)))
-         (dz1 (matrix-matrix-multiply (transpose-matrix w2) dz2))
-         ))
-  )
+         (dz1 (matrix-matrix-elementwise-multiply (matrix-matrix-multiply (transpose-matrix w2) dz2)
+                                                  (scalar-matrix-subtract 1.0 (matrix-power a1 2.0))))
+         (dw1 (matrix-scalar-multiply (matrix-matrix-multiple dz1 (transpose-matrix x))
+                                      (/ 1.0 m)))
+         (db2 (matrix-scalar-multiply (matrix-row-sum dz1) (/ 1.0 m)))
+         (grads (make-hash-table :test 'equal)))
+    (setf (gethash "dw1" grads) dw1
+          (gethash "db1" grads) db1
+          (gethash "dw2" grads) dw2
+          (gethash "db2" grads) db2)
+
+    grads))
+
+
+(defun update-parameters (parameters grads &optional (learning-rate = 1.2))
+  "Update parameters using the gradient descent update rule given above
+
+   Arguments:
+   parameters - hashtable containing the parameters
+   grads      - hashtable containing the gradients
+
+   Returns:
+   parameters - hashtable containing updated parameters"
+  (let* (;; retrive the parameters
+         (w1 (gethash "w1" parameters))
+         (b1 (gethash "b1" parameters))
+         (w2 (gethash "w2" parameters))
+         (b2 (gethash "b2" parameters))
+         ;; retrive the gradient of each parameters
+         (dw1 (gethash "dw1" grads))
+         (db1 (gethash "db1" grads))
+         (dw2 (gethash "dw2" grads))
+         (db2 (gethash "db2" grads)))
+    ;; update the parameters
+    (setf w1 (- w1 (* learning-rate dw1))
+          b1 (- b1 (* learning-rate db1))
+          w2 (- w2 (* learning-rate dw2))
+          b2 (- b2 (* learning-rate db2)))
+    ;; save the updated parameters in the hash and return
+    (setf (gethash "w1" parameters) w1
+          (gethash "b1" parameters) b1
+          (gethash "w2" parameters) w2
+          (gethash "b2" parameters) b2)
+    parameters))
