@@ -55,6 +55,10 @@
   (declare (type number min max))
   (floor (+ min (* (- max min) (rand)))))
 
+(defun make-matrix (num-rows num-cols)
+  "Simple function to create a matrix of size NUM-ROWS by NUM-COLS"
+  (make-array (list num-rows num-cols) :element-type 'single-float :initial-element 0.0))
+
 (defun make-random-array (num-rows num-cols &optional (scale 1.0))
   (let* ((arr (make-array (list num-rows num-cols) :element-type 'single-float)))
     (dotimes (i num-rows)
