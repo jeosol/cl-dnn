@@ -78,6 +78,14 @@
         (setf (aref c i j) sum)))
     c))
 
+(defun matrix-matrix-elementwise-multiply (a b)
+  "Matrix element multiply c[i,j] = a[i,j] * b[i,j]"
+  (let* ((c (make-matrix (num-rows a) (num-rows b))))
+    (dotimes (i (num-rows a))
+      (dotimes (j (num-cols a))
+        (setf (aref c i j) (* (aref a i j) (aref b i j)))))
+    c))
+
 (defun matrix-matrix-add (a b)
   "Returns c = a + b"
   (let* ( (c (make-array (list (num-rows a) (num-cols b)) :element-type 'single-float)))
