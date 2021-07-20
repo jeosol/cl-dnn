@@ -130,21 +130,21 @@
         (setf (aref c i j) (expt (aref matrix i j) power))))
     c))
 
-(defun transpose-matrix (a)
-  "Return the transpose of matrix A"
-  (let* ((c (make-matrix (num-cols a) (num-rows a))))
-    (dotimes (i (num-rows a))
-      (dotimes (j (num-cols a))
-        (setf (aref c j i) (aref a i j))))
-    c))
+(defun transpose-matrix (matrix)
+  "Return the transpose of matrix MATRIX."
+  (let* ((new-matrix (make-matrix (num-cols matrix) (num-rows matrix))))
+    (dotimes (i (num-rows matrix))
+      (dotimes (j (num-cols matrix))
+        (setf (aref new-matrix j i) (aref matrix i j))))
+    new-matrix))
 
-(defun matrix-row-sum (a)
-  "Sums the elements on each row of matrix a"
-  (let* ((c (make-matrix (num-rows a) 1)))
-    (dotimes (i (num-rows a))
-      (dotimes (j (num-cols a))
-        (incf (aref c i 0) (aref a i j))))
-    c))
+(defun matrix-row-sum (matrix)
+  "Sum the elements on each row of matrix MATRIX"
+  (let* ((new-matrix (make-matrix (num-rows matrix) 1)))
+    (dotimes (i (num-rows matrix))
+      (dotimes (j (num-cols matrix))
+        (incf (aref new-matrix i 0) (aref matrix i j))))
+    new-matrix))
 
 (defun matrix-col-sum (a)
   "Sums the elements on each column of matrix a"
