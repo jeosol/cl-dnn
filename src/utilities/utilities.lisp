@@ -155,7 +155,7 @@
     new-matrix))
 
 (defun vector-vector-dot-product (a b)
-  "Returns the sum of the products of components in vectors a and b"
+  "Return the dotproduct: sum of the products of components in vectors a and b"
   (loop :for ai :across a :for bi :across b :summing (* ai bi) :into sum
         :finally (return sum)))
 
