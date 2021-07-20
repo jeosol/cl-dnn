@@ -6,56 +6,59 @@
 (in-package :src/utilities/utilities)
 
 (defun make-matrix (num-rows num-cols)
-  "Simple function to create a matrix of size NUM-ROWS by NUM-COLS"
+  "Create a matrix of size NUM-ROWS by NUM-COLS."
   (make-array (list num-rows num-cols) :element-type 'single-float :initial-element 0.0))
 
-(defun tanh-activation (arr)
-  "Implements the hyperbolic tangent (tanh) function"
-  (let* ((rows (num-rows arr))
-         (cols (num-cols arr))
-         (new-arr (make-matrix rows cols)))
+(defun tanh-activation (matrix)
+  "Compute hyperbolic tangent function tanh(x) where x is an element of matrix MATRIX."
+  (let* ((rows (num-rows matrix))
+         (cols (num-cols matrix))
+         (new-matrix (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
-        (setf (aref new-arr i j) (/ (- (exp (aref arr i j)) (exp (- (aref arr i j))))
-                                      (+ (exp (aref arr i j)) (exp (- (aref arr i j))))))))
-    new-arr))
+        (setf (aref new-matrix i j) (/ (- (exp (aref matrix i j)) (exp (- (aref matrix i j))))
+                                       (+ (exp (aref matrix i j)) (exp (- (aref matrix i j))))))))
+    new-matrix))
 
-(defun relu-activation (arr)
-  "Implements the rectified linear unit (relu) function."
-  (let* ((rows (num-rows arr))
-         (cols (num-cols arr))
-         (new-arr (make-matrix rows cols)))
+(defun relu-activation (matrix)
+  "Compute the RELU(x) where x is an element of matrix MATRIX."
+  (let* ((rows (num-rows matrix))
+         (cols (num-cols matrix))
+         (new-matrix (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
-        (setf (aref new-arr i j) (if (< (aref arr i j) 0.0) 0.0 (aref arr i j)))))
-    new-arr))
+        (setf (aref new-matrix i j) (if (< (aref matrix i j) 0.0) 0.0 (aref matrix i j)))))
+    new-matrix))
 
-(defun sigmoid-activation (arr)
+(defun sigmoid-activation (matrix)
   "Implements the logistic/sigmoid function"
-  (let* ((rows (num-rows arr))
-         (cols (num-cols arr))
-         (new-arr (make-matrix rows cols)))
+  (let* ((rows (num-rows matrix))
+         (cols (num-cols matrix))
+         (new-matrix (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
-        (setf (aref new-arr i j) (/ 1 (+ 1 (exp (- (aref arr i j))))))))
-    new-arr))
+        (setf (aref new-matrix i j) (/ 1 (+ 1 (exp (- (aref matrix i j))))))))
+    new-matrix))
 
-(defun num-rows (X)
-  "Returns the number of rows in matrix X."
+(defun num-rows (matrix)
+  "Return the number of rows in matrix MATRIX"
   (nth 0 (array-dimensions X)))
 
-(defun num-cols (X)
-  "Returns the number of rows in matrix X."
+(defun num-cols (matrix)
+  "Return the number of rows in matrix MATRIX."
   (nth 1 (array-dimensions X)))
 
 (defun rand ()
+  "Return a random float between 0 and 1."
   (random 1.0))
 
 (defun rand-double (&optional (min 0) (max 1.0))
+  "Return a random float between MIN and MAX."
   (declare (type number min max))
   (+ min (* (- max min) (rand))))
 
 (defun rand-int (&optional (min 0) (max 1))
+  "Return a random integer between MIN and MAX."
   (declare (type number min max))
   (floor (+ min (* (- max min) (rand)))))
 
