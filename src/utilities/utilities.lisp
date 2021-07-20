@@ -83,7 +83,7 @@
     c))
 
 (defun matrix-matrix-elementwise-multiply (a b)
-  "Matrix element multiply c[i,j] = a[i,j] * b[i,j]"
+  "Perform elementwise multiplication of two matrices: c[i,j] = a[i,j] * b[i,j]."
   (let* ((c (make-matrix (num-rows a) (num-rows b))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
@@ -91,7 +91,7 @@
     c))
 
 (defun matrix-matrix-add (a b)
-  "Returns c = a + b"
+  "Perform elementwise addition of two matrices: c[i,j] = a[i,j] + b[i,j]."
   (let* ( (c (make-marix (num-rows a) (num-cols a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
@@ -99,7 +99,7 @@
     c))
 
 (defun matrix-matrix-subtract (a b)
-  "Returns c = a - b"
+  "Perform elementwise subtraction of two matrices: c[i,j] = a[i,j] - b[i,j]."
   (let* ( (c (make-matrix (num-rows a) (num-cols a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
@@ -107,27 +107,27 @@
     c))
 
 (defun scalar-matrix-subtract (scalar matrix)
-  "Computes a new matrix with elements c[i,j] = 1 - matrix[i,j]"
+  "Compute c[i,j] = scalar - matrix[i,j] for each element of matrix."
   (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
     (dotimes (i (num-rows matrix))
       (dotimes (j (num-rows matrix))
         (setf (aref c i j) (- scalar (aref matrix i j)))))
     c))
 
-(defun matrix-scalar-multiply (matrix-a scalar)
-  "Returns c = a*scalar - multiplies the elements of matrix a by SCALAR"
-  (let* ((c (make-matrix (num-rows matrix-a) (num-cols matrix-a))))
-    (dotimes (i (num-rows matrix-a))
-      (dotimes (j (num-rows matrix-a))
-        (setf (aref c i j) (* scalar (aref matrix-a i j)))))
+(defun matrix-scalar-multiply (matrix scalar)
+  "Scale the elementns of matrix by scalar: Returns c[i,j] = matrix[i,j] * scalar."
+  (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
+    (dotimes (i (num-rows matrix))
+      (dotimes (j (num-rows matrix))
+        (setf (aref c i j) (* scalar (aref matrix i j)))))
     c))
 
-(defun matrix-power (matrix-a power)
-  "Computes the elements of matrix MATRIX-A raised to power POWER"
-  (let* ((c (make-matrix (num-rows matrix-a) (num-cols matrix-a))))
-    (dotimes (i (num-rows matrix-a))
-      (dotimes (j (num-rows matrix-a))
-        (setf (aref c i j) (expt (aref matrix-a i j) power))))
+(defun matrix-power (matrix power)
+  "Compute the elements of matrix MATRIX raised to power POWER."
+  (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
+    (dotimes (i (num-rows matrix))
+      (dotimes (j (num-rows matrix))
+        (setf (aref c i j) (expt (aref matrix i j) power))))
     c))
 
 (defun transpose-matrix (a)
