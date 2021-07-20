@@ -131,8 +131,8 @@
     c))
 
 (defun transpose-matrix (a)
-  "Returns the transpose of matrix A"
-  (let* ((c (make-matrix (num-cols a) (num-rows b))))
+  "Return the transpose of matrix A"
+  (let* ((c (make-matrix (num-cols a) (num-rows a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
         (setf (aref c j i) (aref a i j))))
