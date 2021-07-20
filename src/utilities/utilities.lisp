@@ -160,7 +160,9 @@
         :finally (return sum)))
 
 (defun layer-sizes (x y &optional (n-h 4))
-  "Arguments:
+  "Return the neural network layer sizes for input, hidden, and output layers,
+
+   Arguments:
    X -- input dataset of shape (input size, number of examples)
    Y -- labels of shape (output size, number of examples
 
@@ -177,7 +179,8 @@
 ;;; Change the uniform random function for the weight matrices to
 ;;; normalized random function 
 (defun initialize-parameters-one-hidden-layer (n-x n-h n-y)
-  "
+  "Perform initialization of the layer weights and bias.
+
   Arguments:
   n-x -- size of the input layer
   n-h -- size of the hidden layer
@@ -204,7 +207,8 @@
 (defun forward-propagation-one-hidden-layer (x parameters
                                              &optional (activation-functions '(#'tanh-activation
                                                                                #'sigmoid-activation)))
-  "Performs forward propagation
+  "Perform forward propagation.
+
   Argument:
   X -- input data of size (n-x, m)
   parameters - hashtable containing weight and bias matrices.
@@ -228,7 +232,8 @@
     a2 cache))
 
 (defun compute-cost-one-hidden-layer (a2 y)
-  "Computes the cross-entropy cost
+  "Compute the cross-entropy cost.
+
    Arguments:
    A2 -- The sigmoid output of the scond activation of shape (1, number of examples)
    Y  -- 'True' labels vector of shape (1, number of examples)
@@ -243,7 +248,7 @@
     (* (/ 1.0 m) sum)))
 
 (defun backward-propagation-one-hidden-layer (parameters cache x y)
-  "Implements the backward propagation algorithm
+  "Perform backward propagation.
 
    Arguments:
    parameters - hashmap containing the weights and biases
@@ -279,7 +284,7 @@
 
 ;;; Update parameters using gradient descent procedure
 (defun update-parameters-one-hidden-layer (parameters grads &optional (learning-rate 1.2))
-  "Update parameters using the gradient descent update rule given above
+  "Update parameters using the gradient descent: x = x - (learning_rate * dL/dx).
 
    Arguments:
    parameters - hashtable containing the parameters
@@ -311,7 +316,8 @@
 
 ;;; Neural network model with one hidden layer
 (defun nn-model-one-hidden-layer (x y n-h &optional (num-iterations 10000) (print-cost nil))
-  "
+  "Run the one-hidden layer neural newtwork model.
+
   Arguments:
   X -- dataset of shape (n_x, number of examples) (n_x dimension of each sample)
   Y -- labels of shape (1, number of examples
