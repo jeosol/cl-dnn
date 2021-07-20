@@ -146,13 +146,13 @@
         (incf (aref new-matrix i 0) (aref matrix i j))))
     new-matrix))
 
-(defun matrix-col-sum (a)
-  "Sums the elements on each column of matrix a"
-  (let* ((c (make-matrix (num-cols a) 1)))
-    (dotimes (j (num-cols a))
-      (dotimes (i (num-rows a))
-        (incf (aref c j 0) (aref a i j))))
-    c))
+(defun matrix-col-sum (matrix)
+  "Sum the elements on each column of matrix MATRIX"
+  (let* ((new-matrix (make-matrix (num-cols matrix) 1)))
+    (dotimes (j (num-cols matrix))
+      (dotimes (i (num-rows matrix))
+        (incf (aref new-matrix j 0) (aref matrix i j))))
+    new-matrix))
 
 (defun vector-vector-dot-product (a b)
   "Returns the sum of the products of components in vectors a and b"
