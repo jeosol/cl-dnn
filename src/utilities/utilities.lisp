@@ -63,6 +63,7 @@
   (floor (+ min (* (- max min) (rand)))))
 
 (defun make-random-array (num-rows num-cols &optional (scale 1.0))
+  "Create a random matrix with elements initialized to random numbers in [0,1]."
   (let* ((arr (make-matrix num-rows numcols)))
     (dotimes (i num-rows)
       (dotimes (j num-cols)
