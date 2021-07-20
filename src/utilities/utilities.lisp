@@ -71,7 +71,7 @@
     arr))
 
 (defun matrix-matrix-multiply (a b)
-  "C = A*B"
+  "Compute the product of matrices: C = A*B."
   (let* ((c (make-matrix (num-rows a) (num-cols b)))
          (sum 0.0))
     (dotimes (i (num-rows a))
