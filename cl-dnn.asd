@@ -5,7 +5,16 @@
   :depends-on ()
   :components ((:module "src"
                 :components
-                ((:file "main"))))
+                ((:file "main")
+                 (:module "array"
+                  :components
+                  ((:file "array")))
+                 (:module "activations"
+                  :components
+                  ((:file "activations")))
+                 (:module "architecture"
+                  :components
+                  ((:file :one-hidden-layer-network))))))
   :description "CL-DNN - Implementation of Deep Neural Networks using Common Lisp"
   :in-order-to ((test-op (test-op "cl-dnn/tests"))))
 
