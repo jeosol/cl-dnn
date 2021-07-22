@@ -2,6 +2,7 @@
     (:use :cl)
   (:nicknames :two-layer-model)
   (:use-reexport :src/array/array)
+  (:use-reexport :src/activations/activations)
   (:export #:nn-model-one-hidden-layer
            #:get-batch-start-end-indices))
 
