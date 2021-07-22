@@ -191,27 +191,37 @@
   n-h            -- number of units in hiden layer
   num-iterations -- number of iterations in gradient descent loop
   print-cost     -- if T, print the cost every 1000 iterations"
-  (let* (dummy n-x n-y parameters a2 cache cost grads cost-history x-batch (start 0) end)
-    ;; Determine the batch related parameters
-    ;(setf (values num-full-batches ))
+  (let* (dummy n-x n-y parameters a2 cache cost grads cost-history
+               batch-indices (mini-batch-counter 0) (epoch 1))
     (setf (values n-x dummy n-y) (layer-sizes x y n-h))
+    ;; Determine the batch start and end indices
+    (setf batch-indices (get-batch-start-end-indices n-x batch-size))
     ;; Initialize parameters
     (setf parameters (initialize-parameters-one-hidden-layer n-x n-h n-y))
     ;; Loop for gradient descent
-    (dotimes (k num-iterations)
-      ;(dotimes (m i))
-      ;; Forward propagation step
-      (setf (values a2 cache) (forward-propagation-one-hidden-layer x parameters))
-      ;; Compute the cost
-      (setf cost (compute-cost-one-hidden-layer a2 y))
-      (push cost cost-history)
-      ;; Backward propagation step
-      (setf grads (backward-propagation-one-hidden-layer parameters cache x y))
-      ;; Update parameters
-      (setf parameters (update-parameters-one-hidden-layer parameters grads))
-      
-      (when (and print-cost (zerop (mod k 1000)))
-        (format t "~&Cost after iteration ~d: ~18,12f" k cost)))
+    (loop :for k :from 0 :below num-iterations :do
+      ;; Shuffle data here
+      ;; Do batch gradient descent
+      (loop :for (start-index end-index) :in batch-indices
+            :for batch-xdata = (get-batch-data x start-index end-index)
+            :for batch-ydata = (get-batch-data y start-index end-index)
+            :do
+               ;; Forward propagation step
+               (setf (values a2 cache) (forward-propagation-one-hidden-layer batch-xdata parameters))
+               ;; Compute the cost
+               (setf cost (compute-cost-one-hidden-layer a2 y))
+               (push (list epoch (incf mini-batch-counter) cost) cost-history)
+               ;; Backward propagation step
+               (setf grads (backward-propagation-one-hidden-layer parameters cache x y))
+               ;; Update parameters
+               (setf parameters (update-parameters-one-hidden-layer parameters grads))
+               
+               (when (and print-cost (zerop (mod k 1000)))
+                 (format t "~&Cost after iteration ~d: ~18,12f" k cost))
+               ;; Increment iteration counter
+               (incf k))
+      ;; Increment epoch counter
+      (incf epoch))
     ;; Return final parameters
     (values parameters (reverse cost-history))))
 
