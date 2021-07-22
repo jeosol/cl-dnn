@@ -5,6 +5,8 @@
            #:relu-activation
            #:sigmoid-activation))
 
+(in-package :src/activations/activations)
+
 (defun tanh-activation (matrix)
   "Compute hyperbolic tangent function tanh(x) where x is an element of matrix MATRIX."
   (let* ((rows (num-rows matrix))
