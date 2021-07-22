@@ -161,7 +161,7 @@
     parameters))
 
 ;;; Neural network model with one hidden layer
-(defun nn-model-one-hidden-layer (x y n-h &optional (num-iterations 10000) (print-cost nil))
+(defun nn-model-one-hidden-layer (x y n-h &key (num-iterations 10000) (print-cost nil))
   "Run the one-hidden layer neural newtwork model.
   Arguments:
   X              -- dataset of shape (n_x, number of examples) (n_x dimension of each sample)
