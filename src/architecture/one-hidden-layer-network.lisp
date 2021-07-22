@@ -1,7 +1,9 @@
 (uiop/package:define-package :src/architecture/one-hidden-layer-network
     (:use :cl)
+  (:nicknames :two-layer-model)
   (:use-reexport :src/array/array)
-  (:export #:nn-model-one-hidden-layer))
+  (:export #:nn-model-one-hidden-layer
+           #:get-batch-start-end-indices))
 
 (in-package :src/architecture/one-hidden-layer-network)
 
@@ -160,8 +162,16 @@
           (gethash "b2" parameters) b2)
     parameters))
 
+;;; Determine batch parameters
+(defun get-batch-start-end-indices (num-samples batch-size)
+  (let* ((num-full-batches (floor (/ num-samples batch-size))))
+    (loop :for i :from 0 :below num-full-batches
+          :for start :from 0 :by batch-size
+          :for end   :from batch-size by batch-size
+          :collect (list start end))))
+
 ;;; Neural network model with one hidden layer
-(defun nn-model-one-hidden-layer (x y n-h &key (num-iterations 10000) (print-cost nil))
+(defun nn-model-one-hidden-layer (x y n-h &key (batch-size 32) (num-iterations 10000) (print-cost nil))
   "Run the one-hidden layer neural newtwork model.
   Arguments:
   X              -- dataset of shape (n_x, number of examples) (n_x dimension of each sample)
@@ -169,12 +179,15 @@
   n-h            -- number of units in hiden layer
   num-iterations -- number of iterations in gradient descent loop
   print-cost     -- if T, print the cost every 1000 iterations"
-  (let* (dummy n-x n-y parameters a2 cache cost grads cost-history) 
+  (let* (dummy n-x n-y parameters a2 cache cost grads cost-history x-batch (start 0) end)
+    ;; Determine the batch related parameters
+    ;(setf (values num-full-batches ))
     (setf (values n-x dummy n-y) (layer-sizes x y n-h))
     ;; Initialize parameters
     (setf parameters (initialize-parameters-one-hidden-layer n-x n-h n-y))
     ;; Loop for gradient descent
     (dotimes (k num-iterations)
+      ;(dotimes (m i))
       ;; Forward propagation step
       (setf (values a2 cache) (forward-propagation-one-hidden-layer x parameters))
       ;; Compute the cost
