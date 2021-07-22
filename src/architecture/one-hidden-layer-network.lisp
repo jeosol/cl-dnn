@@ -183,7 +183,7 @@
         :collect (aref data i)))
 
 ;;; Neural network model with one hidden layer
-(defun nn-model-one-hidden-layer (x y n-h &key (batch-size 32) (num-iterations 10000) (print-cost nil))
+(defun nn-model-one-hidden-layer (x y n-h &key (batch-size 32) (num-epochs 100) (print-cost nil))
   "Run the one-hidden layer neural newtwork model.
   Arguments:
   X              -- dataset of shape (n_x, number of examples) (n_x dimension of each sample)
@@ -199,12 +199,13 @@
     ;; Initialize parameters
     (setf parameters (initialize-parameters-one-hidden-layer n-x n-h n-y))
     ;; Loop for gradient descent
-    (loop :for k :from 0 :below num-iterations :do
+    (loop :for k :from 1 :upto num-epochs :do
       ;; Shuffle data here
       ;; Do batch gradient descent
       (loop :for (start-index end-index) :in batch-indices
             :for batch-xdata = (get-batch-data x start-index end-index)
             :for batch-ydata = (get-batch-data y start-index end-index)
+            :for k :from 0 
             :do
                ;; Forward propagation step
                (setf (values a2 cache) (forward-propagation-one-hidden-layer batch-xdata parameters))
@@ -217,11 +218,7 @@
                (setf parameters (update-parameters-one-hidden-layer parameters grads))
                
                (when (and print-cost (zerop (mod k 1000)))
-                 (format t "~&Cost after iteration ~d: ~18,12f" k cost))
-               ;; Increment iteration counter
-               (incf k))
-      ;; Increment epoch counter
-      (incf epoch))
+                 (format t "~&Cost after iteration ~d: ~18,12f" k cost))))
     ;; Return final parameters
     (values parameters (reverse cost-history))))
 
