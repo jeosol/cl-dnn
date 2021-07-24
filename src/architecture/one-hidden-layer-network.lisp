@@ -78,7 +78,7 @@
           (gethash "a1" cache) a1
           (gethash "z2" cache) z2
           (gethash "a2" cache) a2)
-    a2 cache))
+    (values a2 cache)))
 
 (defun compute-cost-one-hidden-layer (a2 y)
   "Compute the cross-entropy cost.
