@@ -15,7 +15,8 @@
            #:transpose-matrix
            #:matrix-row-sum
            #:matrix-col-sum
-           #:vector-vector-dot-product))
+           #:vector-vector-dot-product
+           #:shuffle-sequence))
 
 (in-package :src/array/array)
 
@@ -141,3 +142,9 @@
   "Return the dotproduct: sum of the products of components in vectors a and b"
   (loop :for ai :across a :for bi :across b :summing (* ai bi) :into sum
         :finally (return sum)))
+
+(defun shuffle-sequence (matrix)
+  "Return a matrix new-matrix with the same dimensions as matrix but with the rows shuffled."
+  (alexandria:shuffle matrix))
+
+
