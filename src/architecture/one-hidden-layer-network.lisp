@@ -54,8 +54,8 @@
 
 ;;; FORWARD PROPAGATION
 (defun forward-propagation-one-hidden-layer (x parameters
-                                             &optional (activation-functions '(#'tanh-activation
-                                                                               #'sigmoid-activation)))
+                                             &optional (activation-functions '(tanh-activation
+                                                                               sigmoid-activation)))
   "Perform forward propagation.
 
   Argument:
