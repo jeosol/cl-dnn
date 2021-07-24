@@ -178,10 +178,10 @@
             start-end-indices))
     (reverse start-end-indices)))
 
-(defun get-batch-data (data start end)
-  "Extract data from index start to end."
+(defun get-batch-data (data start end shuffle-indices)
+  "Extract data from index start to end and get the index of the data from shuffle-indices."
   (loop :for i :from start :below end
-        :collect (aref data i)))
+        :collect (aref data (aref shuffle-indices i))))
 
 ;;; Neural network model with one hidden layer
 (defun nn-model-one-hidden-layer (x y n-h &key (batch-size 32) (num-epochs 100) (print-cost nil))
@@ -193,7 +193,8 @@
   num-iterations -- number of iterations in gradient descent loop
   print-cost     -- if T, print the cost every 1000 iterations"
   (let* (dummy n-x n-y parameters a2 cache cost grads cost-history
-               batch-indices (mini-batch-counter 0) (epoch 1))
+         batch-indices (mini-batch-counter 0) (epoch 1)
+         shuffle-indices)
     (setf (values n-x dummy n-y) (layer-sizes x y n-h))
     ;; Determine the batch start and end indices
     (setf batch-indices (get-batch-start-end-indices n-x batch-size))
@@ -201,11 +202,12 @@
     (setf parameters (initialize-parameters-one-hidden-layer n-x n-h n-y))
     ;; Loop for gradient descent
     (loop :for k :from 1 :upto num-epochs :do
-      ;; Shuffle data here
+      ;; Generate one vector represented shuffle indices of the training data
+      (setf shuffle-indices (generate-random-sequence n-x))
       ;; Do batch gradient descent
       (loop :for (start-index end-index) :in batch-indices
-            :for batch-xdata = (get-batch-data x start-index end-index)
-            :for batch-ydata = (get-batch-data y start-index end-index)
+            :for batch-xdata = (get-batch-data x start-index end-index shuffle-indices)
+            :for batch-ydata = (get-batch-data y start-index end-index shuffle-indices)
             :for k :from 0 
             :do
                ;; Forward propagation step
