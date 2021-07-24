@@ -12,13 +12,15 @@
            #:matrix-matrix-add
            #:matrix-matrix-subtract
            #:matrix-scalar-multiply
+           #:scalar-matrix-subtract
            #:matrix-power
            #:transpose-matrix
            #:matrix-row-sum
            #:matrix-col-sum
            #:vector-vector-dot-product
            #:shuffle-sequence
-           #:generate-random-sequence))
+           #:generate-random-sequence
+           #:dimensions))
 
 (in-package :src/array/array)
 
@@ -99,18 +101,20 @@
 
 (defun matrix-matrix-add (a b)
   "Perform elementwise addition of two matrices: c[i,j] = a[i,j] + b[i,j]."
-  (let* ( (c (make-matrix (num-rows a) (num-cols a))))
+  (let* ((c (make-matrix (num-rows a) (num-cols a)))
+         (b-num-cols (num-cols b)))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref (aref c i) j) (+ (aref (aref a i) j) (aref (aref b i) (min 0 j))))))
+        (setf (aref (aref c i) j) (+ (aref (aref a i) j) (aref (aref b i) (min j b-num-cols))))))
     c))
 
 (defun matrix-matrix-subtract (a b)
   "Perform elementwise subtraction of two matrices: c[i,j] = a[i,j] - b[i,j]."
-  (let* ( (c (make-matrix (num-rows a) (num-cols a))))
+  (let* ((c (make-matrix (num-rows a) (num-cols a)))
+         (b-num-cols (num-cols b)))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref (aref c i) j) (- (aref (aref a i) j) (aref (aref b i) (min 0 j))))))
+        (setf (aref (aref c i) j) (- (aref (aref a i) j) (aref (aref b i) (min j b-num-cols))))))
     c))
 
 (defun scalar-matrix-subtract (scalar matrix)
