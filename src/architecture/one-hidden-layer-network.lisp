@@ -89,11 +89,13 @@
 
    Returns:
    Cost -- cross-entropy"
-  (let* ((m (num-cols y))
+  (let* ((m (length y))
+         (num-outputs (length (aref y 0)))
          (sum 0.0))
     (dotimes (i m)
-      (incf sum (+ (* (aref y 0 i) (log (aref a2 0 i)))
-                   (* (- 1.0 (aref y 0 i)) (log (- 1.0 (aref a2 0 i)))))))
+      (dotimes (k num-outputs)
+        (incf sum (+ (* (aref (aref y i) k) (log (aref (aref a2 i) k)))
+                     (* (- 1.0 (aref (aref y i) k)) (log (- 1.0 (aref (aref a2 i) k))))))))
     (* (/ 1.0 m) sum)))
 
 (defun backward-propagation-one-hidden-layer (parameters cache x y)
@@ -234,7 +236,7 @@
                       #(1 0)
                       #(1 1)))
 
-(defvar *xor-ydata* #(0 1 1 0))
+(defvar *xor-ydata* #(#(0) #(1) #(1) #(1) #(0)))
 
 (defun test-xor ()
   (nn-model-one-hidden-layer *xor-xdata* *xor-ydata* 10))
