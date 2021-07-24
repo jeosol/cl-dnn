@@ -114,7 +114,7 @@
   "Compute c[i,j] = scalar - matrix[i,j] for each element of matrix."
   (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
     (dotimes (i (num-rows matrix))
-      (dotimes (j (num-rows matrix))
+      (dotimes (j (num-cols matrix))
         (setf (aref (aref c i) j) (- scalar (aref (aref matrix i) j)))))
     c))
 
@@ -130,7 +130,7 @@
   "Compute the elements of matrix MATRIX raised to power POWER."
   (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
     (dotimes (i (num-rows matrix))
-      (dotimes (j (num-rows matrix))
+      (dotimes (j (num-cols matrix))
         (setf (aref (aref c i) j) (expt (aref (aref matrix i) j) power))))
     c))
 
