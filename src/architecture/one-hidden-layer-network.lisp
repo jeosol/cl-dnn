@@ -117,11 +117,18 @@
          (a2 (gethash "a2" cache))
          ;; backward propagation to calculate dw1, dw2, db1, db2, dz1, dz2
          (dz2 (matrix-matrix-subtract a2 y))
+         ;(dummy (print (list "dim sz2" (dimensions dz2) "dim a1" (dimensions a1))))
          (dw2 (matrix-scalar-multiply (matrix-matrix-multiply dz2 (transpose-matrix a1)) (/ 1.0 m)))
+
          (db2 (matrix-scalar-multiply (matrix-row-sum dz2) (/ 1.0 m)))
+         ;(dummy (print 'here))
+         ;; (dummy (print (list "dim w2" (dimensions (transpose-matrix w2)) "dim dz2" (dimensions dz2)
+         ;;                     "dim a1" (dimensions a1))))
          (dz1 (matrix-matrix-elementwise-multiply (matrix-matrix-multiply (transpose-matrix w2) dz2)
                                                   (scalar-matrix-subtract 1.0 (matrix-power a1 2.0))))
-         (dw1 (matrix-scalar-multiply (matrix-matrix-multiple dz1 (transpose-matrix x))
+         ;; (dummy (print (list "dim dz1" (dimensions dz1))))
+         ;; (dummy (print (list "dim x" (dimensions (transpose-matrix x)) "dim dz1" (dimensions dz1))))
+         (dw1 (matrix-scalar-multiply (matrix-matrix-multiply dz1 (transpose-matrix x))
                                       (/ 1.0 m)))
          (db1 (matrix-scalar-multiply (matrix-row-sum dz1) (/ 1.0 m)))
          (grads (make-hash-table :test 'equal)))
@@ -197,6 +204,7 @@
   print-cost     -- if T, print the cost every 1000 iterations"
   (let* (dummy n-x n-y parameters a2 cache cost grads cost-history
          batch-indices (mini-batch-counter 0) (epoch 1)
+         (iter-counter 0)
          shuffle-indices)
     ;; Get dimensions for the input and output layers
     (setf (values n-x dummy n-y) (layer-sizes x y n-h))
@@ -214,8 +222,9 @@
       (loop :for (start-index end-index) :in batch-indices
             :for batch-xdata = (get-batch-data x start-index end-index shuffle-indices)
             :for batch-ydata = (get-batch-data y start-index end-index shuffle-indices)
-            :for k :from 0 
             :do
+               ;; increment iteration counter
+               (incf iter-counter)
                ;; Forward propagation step
                (setf (values a2 cache) (forward-propagation-one-hidden-layer batch-xdata parameters))
                ;; Compute the cost
@@ -226,19 +235,20 @@
                ;; Update parameters
                (setf parameters (update-parameters-one-hidden-layer parameters grads))
                
-               (when (and print-cost (zerop (mod k 1000)))
-                 (format t "~&Cost after iteration ~d: ~18,12f" k cost))))
+               (when print-cost
+                 (format t "Epoch ~5d of ~5d: Cost after iterations ~5d: ~18,12f~&" k num-epochs
+                         iter-counter cost))))
     ;; Return final parameters
-    (values parameters (reveqrse cost-history))))
+    (values parameters (reverse cost-history))))
 
 ;; Simple test with XOR data
-(defvar *xor-xdata* #(#(0 0)
-                      #(0 1)
-                      #(1 0)
-                      #(1 1)))
+(defparameter *xor-xdata* #(#(0.0 0.0)
+                            #(0.0 1.0)
+                            #(1.0 0.0)
+                            #(1.0 1.0)))
 
 (defvar *xor-ydata* #(#(0) #(1) #(1) #(0)))
 
 (defun test-xor ()
-  (nn-model-one-hidden-layer *xor-xdata* *xor-ydata* 10))
+  (nn-model-one-hidden-layer *xor-xdata* *xor-ydata* 10 :print-cost t))
 
