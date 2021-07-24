@@ -107,7 +107,7 @@
   (let* ( (c (make-matrix (num-rows a) (num-cols a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref (aref c i) j) (- (aref (aref a i) j) (aref (aref b i) j)))))
+        (setf (aref (aref c i) j) (- (aref (aref a i) j) (aref (aref b i) (min 0 j))))))
     c))
 
 (defun scalar-matrix-subtract (scalar matrix)
@@ -131,7 +131,7 @@
   (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
     (dotimes (i (num-rows matrix))
       (dotimes (j (num-rows matrix))
-        (setf (aref c i j) (expt (aref matrix i j) power))))
+        (setf (aref (aref c i) j) (expt (aref (aref matrix i) j) power))))
     c))
 
 (defun transpose-matrix (matrix)
