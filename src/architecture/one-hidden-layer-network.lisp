@@ -228,4 +228,14 @@
     ;; Return final parameters
     (values parameters (reverse cost-history))))
 
+;; Simple test with XOR data
+(defvar *xor-xdata* #(#(0 0)
+                      #(0 1)
+                      #(1 0)
+                      #(1 1)))
+
+(defvar *xor-ydata* #(0 1 1 0))
+
+(defun test-xor ()
+  (nn-model-one-hidden-layer *xor-xdata* *xor-ydata* 10))
 
