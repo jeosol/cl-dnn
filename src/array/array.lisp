@@ -168,4 +168,5 @@
   (alexandria:shuffle sequence))
 
 (defun generate-random-sequence (length)
+  "Generate a random sequence"
   (alexandria:shuffle (map 'vector #'identity (loop :for i :from 0 :below length :collect i))))
