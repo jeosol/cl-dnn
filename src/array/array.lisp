@@ -105,7 +105,7 @@
          (b-num-cols (num-cols b)))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref (aref c i) j) (+ (aref (aref a i) j) (aref (aref b i) (min j b-num-cols))))))
+        (setf (aref (aref c i) j) (+ (aref (aref a i) j) (aref (aref b i) (min j (1- b-num-cols)))))))
     c))
 
 (defun matrix-matrix-subtract (a b)
@@ -114,7 +114,7 @@
          (b-num-cols (num-cols b)))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref (aref c i) j) (- (aref (aref a i) j) (aref (aref b i) (min j b-num-cols))))))
+        (setf (aref (aref c i) j) (- (aref (aref a i) j) (aref (aref b i) (min j (1- b-num-cols)))))))
     c))
 
 (defun scalar-matrix-subtract (scalar matrix)
