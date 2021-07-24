@@ -21,8 +21,8 @@
    n-y -- the size of the output layer"
   (let ((n-x (num-rows x))
         (n-y (num-rows y)))
-    (assert (= (num-cols x) (= num-cols y) nil "Different number of samples in X and Y.")))
-  (values n-x n-h n-y))
+    (assert (= n-x n-y) nil "Different number of samples in X and Y.")
+    (values n-x n-h n-y)))
 
 ;;; TODO:
 ;;; Change the uniform random function for the weight matrices to
