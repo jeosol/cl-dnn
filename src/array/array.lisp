@@ -99,7 +99,7 @@
   (let* ( (c (make-matrix (num-rows a) (num-cols a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref (aref c i) j) (+ (aref (aref a i) j) (aref (aref b i) j)))))
+        (setf (aref (aref c i) j) (+ (aref (aref a i) j) (aref (aref b i) (min 0 j))))))
     c))
 
 (defun matrix-matrix-subtract (a b)
