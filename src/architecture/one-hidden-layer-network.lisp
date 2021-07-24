@@ -66,9 +66,9 @@
   A2 -- The sigmoid output of the second activation
   cache -- a hashmap containing z1, a1, z2, and a2"
   (let* ((w1 (gethash "w1" parameters))
-         (b1 (gethash "b1" parameters))
+         (b1 (gethash "b1" parameters)) 
          (w2 (gethash "w2" parameters))
-         (b2 (gethash "b2" parameters))
+         (b2 (gethash "b2" parameters)) 
          (z1 (matrix-matrix-add (matrix-matrix-multiply w1 x) b1))
          (a1 (funcall (nth 0 activation-functions) z1))
          (z2 (matrix-matrix-add (matrix-matrix-multiply w2 a1) b2))
