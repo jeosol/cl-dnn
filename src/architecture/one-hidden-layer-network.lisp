@@ -102,7 +102,7 @@
   "Perform backward propagation.
 
    Arguments:
-   parameters - hashmap containing the weights and biases
+   parameters - hashtable containing the weights and biases
    cache - hashtable containing z1, a1, z2, a2
    x - input data of shape(nx, number of examples)
    y - true labels vector of shape (1, number of exapmles)
