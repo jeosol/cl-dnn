@@ -16,7 +16,8 @@
            #:matrix-row-sum
            #:matrix-col-sum
            #:vector-vector-dot-product
-           #:shuffle-sequence))
+           #:shuffle-sequence
+           #:generate-random-sequence))
 
 (in-package :src/array/array)
 
