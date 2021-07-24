@@ -14,8 +14,10 @@
          (new-matrix (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
-        (setf (aref new-matrix i j) (/ (- (exp (aref matrix i j)) (exp (- (aref matrix i j))))
-                                       (+ (exp (aref matrix i j)) (exp (- (aref matrix i j))))))))
+        (setf (aref (aref new-matrix i) j) (/ (- (exp (aref (aref matrix i) j))
+                                                 (exp (- (aref (aref matrix i) j))))
+                                              (+ (exp (aref (aref matrix i) j))
+                                                 (exp (- (aref (aref matrix i) j))))))))
     new-matrix))
 
 (defun relu-activation (matrix)
@@ -25,7 +27,7 @@
          (new-matrix (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
-        (setf (aref new-matrix i j) (if (< (aref matrix i j) 0.0) 0.0 (aref matrix i j)))))
+        (setf (aref (aref new-matrix i) j) (if (< (aref (aref matrix i) j) 0.0) 0.0 (aref (aref matrix i) j)))))
     new-matrix))
 
 (defun sigmoid-activation (matrix)
@@ -35,5 +37,5 @@
          (new-matrix (make-matrix rows cols)))
     (dotimes (i rows)
       (dotimes (j cols)
-        (setf (aref new-matrix i j) (/ 1 (+ 1 (exp (- (aref matrix i j))))))))
+        (setf (aref (aref new-matrix i) j) (/ 1 (+ 1 (exp (- (aref (aref matrix i) j))))))))
     new-matrix))
