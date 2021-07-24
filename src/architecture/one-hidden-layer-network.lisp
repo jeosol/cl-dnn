@@ -154,10 +154,10 @@
          (dw2 (gethash "dw2" grads))
          (db2 (gethash "db2" grads)))
     ;; update the parameters
-    (setf w1 (- w1 (* learning-rate dw1))
-          b1 (- b1 (* learning-rate db1))
-          w2 (- w2 (* learning-rate dw2))
-          b2 (- b2 (* learning-rate db2)))
+    (setf w1 (matrix-matrix-subtract w1 (matrix-scalar-multiply dw1 learning-rate))
+          b1 (matrix-martix-subtract b1 (matrix-scalar-multiply db1 learning-rate))
+          w2 (matrix-matrix-subtract w2 (matrix-scalar-multiply dw2 learning-rate))
+          b2 (matrix-martix-subtract b2 (matrix-scalar-multiply db2 learning-rate)))
     ;; save the updated parameters in the hash and return
     (setf (gethash "w1" parameters) w1
           (gethash "b1" parameters) b1
