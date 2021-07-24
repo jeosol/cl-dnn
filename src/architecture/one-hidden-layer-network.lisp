@@ -195,15 +195,18 @@
   (let* (dummy n-x n-y parameters a2 cache cost grads cost-history
          batch-indices (mini-batch-counter 0) (epoch 1)
          shuffle-indices)
+    ;; Get dimensions for the input and output layers
     (setf (values n-x dummy n-y) (layer-sizes x y n-h))
+    ;; Get shuffled indices
+    (setf shuffle-indices (map 'vector #'identity (loop :for i :from 0 :below n-x :collect i)))
     ;; Determine the batch start and end indices
     (setf batch-indices (get-batch-start-end-indices n-x batch-size))
     ;; Initialize parameters
     (setf parameters (initialize-parameters-one-hidden-layer n-x n-h n-y))
-    ;; Loop for gradient descent
+    ;; Loop over the training data
     (loop :for k :from 1 :upto num-epochs :do
       ;; Generate one vector represented shuffle indices of the training data
-      (setf shuffle-indices (generate-random-sequence n-x))
+      (setf shuffle-indices (alexandria:shuffle shuffle-indices))
       ;; Do batch gradient descent
       (loop :for (start-index end-index) :in batch-indices
             :for batch-xdata = (get-batch-data x start-index end-index shuffle-indices)
