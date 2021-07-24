@@ -41,10 +41,10 @@
                 b1 -- bias vector of shape (n-h, 1)
                 W2 -- weight matrix of shape (n-y, n-h)
                 b2 -- bias vector of shape (n-y, 1)"
-  (let* ((w1 (make-random-array n-h n-x 0.01))
-         (b1 (make-random-array n-h 1))
-         (w2 (make-random-array n-y n-h 0.01))
-         (b2 (make-random-array n-y 1))
+  (let* ((w1 (make-random-matrix n-h n-x 0.01))
+         (b1 (make-random-matrix n-h 1))
+         (w2 (make-random-matrix n-y n-h 0.01))
+         (b2 (make-random-matrix n-y 1))
          (parameters (make-hash-table :size 4 :test #'equal)))
     (setf (gethash "w1" parameters) w1
           (gethash "b1" parameters) b1
