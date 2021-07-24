@@ -1,6 +1,7 @@
 (uiop/package:define-package :src/array/array
     (:use :cl)
-  (:export #:make-matrix
+  (:export #:make-vector
+           #:make-matrix
            #:make-random-matrix
            #:num-rows
            #:num-cols
@@ -21,9 +22,27 @@
 
 (in-package :src/array/array)
 
+;; 23:19pm July 23, 2021
+;; Comment:
+;; Change matrix format from using (make-array '(num-rows num-cols) ...)
+;; to use vector of vector format,
+;; The new matrix representation is more flexible as it allows us to reshuffle
+;; the rows easily and to extract the training data for a given instance easily
+
+;; However, we will now need to use a slighly more verbose array access syntax: (aref (aref matrix i) j)
+;; to access  the element at location (i,j) instead of (aref matrix i j)
+;;
+
+(defun make-vector (num-elements)
+  "Create a vector with NUM-ELEMENTS."
+  (make-array num-elements :element-type 'single-float :initial-element 0.0))
+
 (defun make-matrix (num-rows num-cols)
   "Create a matrix of size NUM-ROWS by NUM-COLS."
-  (make-array (list num-rows num-cols) :element-type 'single-float :initial-element 0.0))
+  (let* ((matrix (make-array num-rows)))
+    (dotimes (i num-rows)
+      (setf (aref matrix i) (make-vector num-cols)))
+    matrix))
 
 (defun num-rows (matrix)
   "Return the number of rows in matrix MATRIX"
@@ -52,7 +71,7 @@
   (let* ((matrix (make-matrix num-rows num-cols)))
     (dotimes (i num-rows)
       (dotimes (j num-cols)
-        (setf (aref matrix i j) (* (random 1.0) scale))))
+        (setf (aref (aref matrix i) j) (* (random 1.0) scale))))
     matrix))
 
 (defun matrix-matrix-multiply (a b)
@@ -63,8 +82,8 @@
       (dotimes (j (num-cols b))
         (setf sum 0.0)
         (dotimes (k (num-cols a))
-          (incf sum (* (aref a i k) (aref b k j))))
-        (setf (aref c i j) sum)))
+          (incf sum (* (aref (aref a i) k) (aref (aref b k) j))))
+        (setf (aref (aref c i) j) sum)))
     c))
 
 (defun matrix-matrix-elementwise-multiply (a b)
@@ -72,15 +91,15 @@
   (let* ((c (make-matrix (num-rows a) (num-rows b))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref c i j) (* (aref a i j) (aref b i j)))))
+        (setf (aref (aref c i) j) (* (aref (aref a i) j) (aref (aref b i) j)))))
     c))
 
 (defun matrix-matrix-add (a b)
   "Perform elementwise addition of two matrices: c[i,j] = a[i,j] + b[i,j]."
-  (let* ( (c (make-marix (num-rows a) (num-cols a))))
+  (let* ( (c (make-matrix (num-rows a) (num-cols a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref c i j) (+ (aref a i j) (aref b i j)))))
+        (setf (aref (aref c i) j) (+ (aref (aref a i) j) (aref (aref b i) j)))))
     c))
 
 (defun matrix-matrix-subtract (a b)
@@ -88,7 +107,7 @@
   (let* ( (c (make-matrix (num-rows a) (num-cols a))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
-        (setf (aref c i j) (- (aref a i j) (aref b i j)))))
+        (setf (aref (aref c i) j) (- (aref (aref a i) j) (aref (aref b i) j)))))
     c))
 
 (defun scalar-matrix-subtract (scalar matrix)
@@ -96,7 +115,7 @@
   (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
     (dotimes (i (num-rows matrix))
       (dotimes (j (num-rows matrix))
-        (setf (aref c i j) (- scalar (aref matrix i j)))))
+        (setf (aref (aref c i) j) (- scalar (aref (aref matrix i) j)))))
     c))
 
 (defun matrix-scalar-multiply (matrix scalar)
@@ -104,7 +123,7 @@
   (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
     (dotimes (i (num-rows matrix))
       (dotimes (j (num-rows matrix))
-        (setf (aref c i j) (* scalar (aref matrix i j)))))
+        (setf (aref (aref c i) j) (* scalar (aref (aref matrix i) j)))))
     c))
 
 (defun matrix-power (matrix power)
@@ -120,7 +139,7 @@
   (let* ((new-matrix (make-matrix (num-cols matrix) (num-rows matrix))))
     (dotimes (i (num-rows matrix))
       (dotimes (j (num-cols matrix))
-        (setf (aref new-matrix j i) (aref matrix i j))))
+        (setf (aref (aref new-matrix j) i) (aref (aref matrix i) j))))
     new-matrix))
 
 (defun matrix-row-sum (matrix)
@@ -128,7 +147,7 @@
   (let* ((new-matrix (make-matrix (num-rows matrix) 1)))
     (dotimes (i (num-rows matrix))
       (dotimes (j (num-cols matrix))
-        (incf (aref new-matrix i 0) (aref matrix i j))))
+        (incf (aref (aref new-matrix i) 0) (aref (aref matrix i) j))))
     new-matrix))
 
 (defun matrix-col-sum (matrix)
