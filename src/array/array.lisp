@@ -122,7 +122,7 @@
   "Scale the elementns of matrix by scalar: Returns c[i,j] = matrix[i,j] * scalar."
   (let* ((c (make-matrix (num-rows matrix) (num-cols matrix))))
     (dotimes (i (num-rows matrix))
-      (dotimes (j (num-rows matrix))
+      (dotimes (j (num-cols matrix))
         (setf (aref (aref c i) j) (* scalar (aref (aref matrix i) j)))))
     c))
 
