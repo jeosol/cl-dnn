@@ -52,6 +52,9 @@
   "Return the number of rows in matrix MATRIX."
   (length (aref matrix 0)))
 
+(defun dimensions (matrix)
+  (list (num-rows matrix) (num-cols matrix)))
+
 (defun rand ()
   "Return a random float between 0 and 1."
   (random 1.0))
