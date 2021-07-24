@@ -46,11 +46,11 @@
 
 (defun num-rows (matrix)
   "Return the number of rows in matrix MATRIX"
-  (nth 0 (array-dimensions X)))
+  (length matrix))
 
 (defun num-cols (matrix)
   "Return the number of rows in matrix MATRIX."
-  (nth 1 (array-dimensions X)))
+  (length (aref matrix 0)))
 
 (defun rand ()
   "Return a random float between 0 and 1."
