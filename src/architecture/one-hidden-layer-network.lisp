@@ -181,7 +181,7 @@
 (defun get-batch-data (data start end shuffle-indices)
   "Extract data from index start to end and get the index of the data from shuffle-indices."
   (loop :for i :from start :below end
-        :collect (aref data (aref shuffle-indices i))))
+           :collect (aref data (aref shuffle-indices i))))
 
 ;;; Neural network model with one hidden layer
 (defun nn-model-one-hidden-layer (x y n-h &key (batch-size 32) (num-epochs 100) (print-cost nil))
