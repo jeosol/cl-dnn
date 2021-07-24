@@ -1,7 +1,7 @@
 (uiop/package:define-package :src/activations/activations
     (:use :cl)
   (:use-reexport :src/array/array)
-  (:export #:tahn-activation
+  (:export #:tanh-activation
            #:relu-activation
            #:sigmoid-activation))
 
