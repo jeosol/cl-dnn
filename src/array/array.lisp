@@ -1,7 +1,7 @@
 (uiop/package:define-package :src/array/array
     (:use :cl)
   (:export #:make-matrix
-           #:make-random-array
+           #:make-random-matrix
            #:num-rows
            #:num-cols
            #:rand-double
@@ -48,7 +48,7 @@
 
 (defun make-random-matrix (num-rows num-cols &optional (scale 1.0))
   "Create a random matrix with elements initialized to random numbers in [0,1]."
-  (let* ((matrix (make-matrix num-rows numcols)))
+  (let* ((matrix (make-matrix num-rows num-cols)))
     (dotimes (i num-rows)
       (dotimes (j num-cols)
         (setf (aref matrix i j) (* (random 1.0) scale))))
