@@ -93,7 +93,7 @@
 
 (defun matrix-matrix-elementwise-multiply (a b)
   "Perform elementwise multiplication of two matrices: c[i,j] = a[i,j] * b[i,j]."
-  (let* ((c (make-matrix (num-rows a) (num-rows b))))
+  (let* ((c (make-matrix (num-rows a) (num-cols b))))
     (dotimes (i (num-rows a))
       (dotimes (j (num-cols a))
         (setf (aref (aref c i) j) (* (aref (aref a i) j) (aref (aref b i) j)))))
