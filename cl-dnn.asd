@@ -2,7 +2,7 @@
   :version "0.1.0"
   :author "Jerome E. Onwunalu, PhD <jeronwunalu@gmail.com>"
   :license "Thedibia LLC"
-  :depends-on ()
+  :depends-on ("alexandria")
   :components ((:module "src"
                 :components
                 ((:file "main")
