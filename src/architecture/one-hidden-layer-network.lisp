@@ -68,10 +68,10 @@
   (let* ((w1 (gethash "w1" parameters))
          (b1 (gethash "b1" parameters))
          (w2 (gethash "w2" parameters))
-         (b1 (gethash "b1" parameters))
-         (z1 (matrix-matrix-sum (matrix-matrix-multiply w1 x) b1))
+         (b2 (gethash "b2" parameters))
+         (z1 (matrix-matrix-add (matrix-matrix-multiply w1 x) b1))
          (a1 (funcall (nth 0 activation-functions) z1))
-         (z2 (matrix-matrix-sum (matrix-matrix-multiply w2 a1) b2))
+         (z2 (matrix-matrix-add (matrix-matrix-multiply w2 a1) b2))
          (a2 (funcall (nth 1 activation-functions) z2))
          (cache (make-hash-table :test 'equal)))
     (setf (gethash "z1" cache) z1
@@ -228,7 +228,7 @@
                (when (and print-cost (zerop (mod k 1000)))
                  (format t "~&Cost after iteration ~d: ~18,12f" k cost))))
     ;; Return final parameters
-    (values parameters (reverse cost-history))))
+    (values parameters (reveqrse cost-history))))
 
 ;; Simple test with XOR data
 (defvar *xor-xdata* #(#(0 0)
