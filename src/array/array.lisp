@@ -143,8 +143,9 @@
   (loop :for ai :across a :for bi :across b :summing (* ai bi) :into sum
         :finally (return sum)))
 
-(defun shuffle-sequence (matrix)
-  "Return a matrix new-matrix with the same dimensions as matrix but with the rows shuffled."
-  (alexandria:shuffle matrix))
+(defun shuffle-sequence (sequence)
+  "Return a shufle sequence"
+  (alexandria:shuffle sequence))
 
-
+(defun generate-random-sequence (length)
+  (alexandria:shuffle (map 'vector #'identity (loop :for i :from 0 :below length :collect i))))
