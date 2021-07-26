@@ -194,7 +194,10 @@
              :collect (aref data (aref shuffle-indices i)))))
 
 ;;; Neural network model with one hidden layer
-(defun nn-model-one-hidden-layer (x y n-h &key (batch-size 32) (num-epochs 100) (print-cost nil))
+(defun nn-model-one-hidden-layer (train-x train-y n-h &key
+                                                        (batch-size 32) (num-epochs 10000)
+                                                        valid-x valid-y
+                                                        (print-cost nil))
   "Run the one-hidden layer neural newtwork model.
   Arguments:
   X              -- dataset of shape (n_x, number of examples) (n_x dimension of each sample)
@@ -207,7 +210,7 @@
          (iter-counter 0)
          shuffle-indices)
     ;; Get dimensions for the input and output layers
-    (setf (values n-x dummy n-y) (layer-sizes x y n-h))
+    (setf (values n-x dummy n-y) (layer-sizes train-x train-y n-h))
     ;; Get shuffled indices
     (setf shuffle-indices (map 'vector #'identity (loop :for i :from 0 :below n-x :collect i)))
     ;; Determine the batch start and end indices
@@ -220,18 +223,18 @@
       (setf shuffle-indices (alexandria:shuffle shuffle-indices))
       ;; Do batch gradient descent
       (loop :for (start-index end-index) :in batch-indices
-            :for batch-xdata = (get-batch-data x start-index end-index shuffle-indices)
-            :for batch-ydata = (get-batch-data y start-index end-index shuffle-indices)
+            :for batch-x = (get-batch-data train-x start-index end-index shuffle-indices)
+            :for batch-y = (get-batch-data train-y start-index end-index shuffle-indices)
             :do
                ;; increment iteration counter
                (incf iter-counter)
                ;; Forward propagation step
-               (setf (values a2 cache) (forward-propagation-one-hidden-layer batch-xdata parameters))
+               (setf (values a2 cache) (forward-propagation-one-hidden-layer batch-x parameters))
                ;; Compute the cost
-               (setf cost (compute-cost-one-hidden-layer a2 y))
+               (setf cost (compute-cost-one-hidden-layer a2 batch-y))
                (push (list epoch (incf mini-batch-counter) cost) cost-history)
                ;; Backward propagation step
-               (setf grads (backward-propagation-one-hidden-layer parameters cache x y))
+               (setf grads (backward-propagation-one-hidden-layer parameters cache batch-x batch-y))
                ;; Update parameters
                (setf parameters (update-parameters-one-hidden-layer parameters grads))
                
@@ -239,8 +242,14 @@
                  (format t "Epoch ~5d of ~5d: Cost after iterations ~5d: ~18,12f~&" k num-epochs
                          iter-counter cost))))
     ;; Return final parameters
-    (values parameters (reverse cost-history))))
+    ;(values parameters (reverse cost-history))
+    ))
 
+;; TODO
+;; Create example folders
+;; Create option to decay the learning rate
+;; Add option to including different gradient-based methods (e.g., momentum, RMS, Adam)
+;;
 ;; Simple test with XOR data
 (defparameter *xor-xdata* #(#(0.0 0.0)
                             #(0.0 1.0)
