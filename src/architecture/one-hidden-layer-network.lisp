@@ -237,7 +237,9 @@
                (setf grads (backward-propagation-one-hidden-layer parameters cache batch-x batch-y))
                ;; Update parameters
                (setf parameters (update-parameters-one-hidden-layer parameters grads))
-               
+               ;; compute accuracy on the validation data
+               (when (and valid-x valid-y)
+                 )
                (when print-cost
                  (format t "Epoch ~5d of ~5d: Cost after iterations ~5d: ~18,12f~&" k num-epochs
                          iter-counter cost))))
