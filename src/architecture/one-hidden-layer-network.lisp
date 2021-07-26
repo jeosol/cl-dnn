@@ -240,7 +240,7 @@
                (setf learning-rate (* learning-rate (/ 1.0 (+ 1.0 (* decay-rate iter-counter)))))
                ;; Update parameters
                (setf parameters (update-parameters-one-hidden-layer parameters grads learning-rate))
-               ;; compute accuracy on the validation data
+               ;; compute accuracy of the validation data using the current network parameters
                (when (and valid-x valid-y)
                  )
                (when print-cost
