@@ -208,7 +208,8 @@
   (let* (dummy n-x n-y parameters a2 cache cost grads cost-history
          batch-indices (mini-batch-counter 0) (epoch 1)
          (iter-counter 0)
-         shuffle-indices)
+         shuffle-indices
+         (learning-rate 1.2) (decay-rate 1.0))
     ;; Get dimensions for the input and output layers
     (setf (values n-x dummy n-y) (layer-sizes train-x train-y n-h))
     ;; Get shuffled indices
@@ -235,8 +236,10 @@
                (push (list epoch (incf mini-batch-counter) cost) cost-history)
                ;; Backward propagation step
                (setf grads (backward-propagation-one-hidden-layer parameters cache batch-x batch-y))
+               ;; reduce the learning parameter
+               (setf learning-rate (* learning-rate (/ 1.0 (+ 1.0 (* decay-rate iter-counter)))))
                ;; Update parameters
-               (setf parameters (update-parameters-one-hidden-layer parameters grads))
+               (setf parameters (update-parameters-one-hidden-layer parameters grads learning-rate))
                ;; compute accuracy on the validation data
                (when (and valid-x valid-y)
                  )
