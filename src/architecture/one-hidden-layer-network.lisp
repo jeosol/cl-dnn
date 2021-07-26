@@ -260,6 +260,6 @@
 
 (defvar *xor-ydata* #(#(0) #(1) #(1) #(0)))
 
-(defun test-xor ()
-  (nn-model-one-hidden-layer *xor-xdata* *xor-ydata* 10 :print-cost t))
+(defun test-xor (&optional (num-epochs 10))
+  (nn-model-one-hidden-layer *xor-xdata* *xor-ydata* 10 :num-epochs num-epochs  :print-cost t))
 
