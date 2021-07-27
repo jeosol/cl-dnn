@@ -21,7 +21,10 @@
            #:shuffle-sequence
            #:generate-random-sequence
            #:dimensions
-           #:one-hot-encode))
+           #:one-hot-encode
+           #:get-batch-data
+           #:shuffle-data
+           #:slice-data))
 
 (in-package :src/array/array)
 
@@ -187,5 +190,35 @@
     (setf (aref encoded value) 1.0)
     encoded))
 
+(defun shuffle-data (data shuffle-indices)
+  "Shuffle data using the shuffle indices"
+  (map 'vector #'identity
+       (loop :for index :across shuffle-indices
+             :collect (aref data index))))
 
+(defun slice-data (data start end shuffle-indices)
+  "Extract data from index start to end and get the index of the data from shuffle-indices."
+  (map 'vector #'identity
+       (loop :for i :from start :below end
+             :collect (aref data (aref shuffle-indices i)))))
+
+(defun train-test-split (x-data y-data &optional (test-fraction 0.10) (print-p t))
+  "Split the training and test data with TEST-FRACTION for test"
+  (let* ((num-rows (length x-data)))
+    (assert (= (length x-data) (length y-data)) nil "Length of x-data ~d must be equal to y-data"
+            (length x-data) (length y-data))
+    (let* ((shuffle-indices (generate-random-sequence num-rows))
+           (x-data (shuffle-data x-data shuffle-indices))
+           (y-data (shuffle-data y-data shuffle-indices))
+           (num-test-data (floor (* test-fraction num-rows)))
+           (train-x (slice-data x-data 0 num-test-data shuffle-indices))
+           (train-y (slice-data y-data 0 num-test-data shuffle-indices))
+           (test-x  (slice-data x-data num-test-data num-rows shuffle-indices))
+           (test-y  (slice-data y-data num-test-data num-rows shuffle-indices)))
+      (when print-p
+        (format t "~&Train-x data size = ~5d" (length train-x))
+        (format t "~&Train-y data size = ~5d" (length train-y))
+        (format t "~&Test-y data size  = ~5d" (length test-x))
+        (format t "~&Test-y data size  = ~5d" (length test=y)))
+      (values train-x train-y test-x test-y))))
 
