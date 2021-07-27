@@ -187,12 +187,6 @@
             start-end-indices))
     (reverse start-end-indices)))
 
-(defun get-batch-data (data start end shuffle-indices)
-  "Extract data from index start to end and get the index of the data from shuffle-indices."
-  (map 'vector #'identity
-       (loop :for i :from start :below end
-             :collect (aref data (aref shuffle-indices i)))))
-
 ;;; Neural network model with one hidden layer
 (defun nn-model-one-hidden-layer (train-x train-y n-h &key
                                                         (batch-size 32) (num-epochs 10000)
@@ -224,8 +218,8 @@
       (setf shuffle-indices (alexandria:shuffle shuffle-indices))
       ;; Do batch gradient descent
       (loop :for (start-index end-index) :in batch-indices
-            :for batch-x = (get-batch-data train-x start-index end-index shuffle-indices)
-            :for batch-y = (get-batch-data train-y start-index end-index shuffle-indices)
+            :for batch-x = (slice-data train-x start-index end-index shuffle-indices)
+            :for batch-y = (slice-data train-y start-index end-index shuffle-indices)
             :do
                ;; increment iteration counter
                (incf iter-counter)
