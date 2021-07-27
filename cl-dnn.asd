@@ -2,7 +2,9 @@
   :version "0.1.0"
   :author "Jerome E. Onwunalu, PhD <jeronwunalu@gmail.com>"
   :license "Thedibia LLC"
-  :depends-on ("alexandria")
+  :depends-on ("alexandria"
+               "cl-csv"
+               "cl-simple-table")
   :components ((:module "src"
                 :components
                 ((:file "main")
@@ -12,6 +14,9 @@
                  (:module "activations"
                   :components
                   ((:file "activations")))
+                 (:module "examples"
+                  :components
+                  ((:file "mnist-utils")))
                  (:module "architecture"
                   :components
                   ((:file :one-hidden-layer-network))))))
