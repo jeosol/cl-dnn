@@ -24,7 +24,8 @@
            #:one-hot-encode
            #:get-batch-data
            #:shuffle-data
-           #:slice-data))
+           #:slice-data
+           #:train-test-split))
 
 (in-package :src/array/array)
 
