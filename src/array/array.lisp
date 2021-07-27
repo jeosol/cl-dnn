@@ -20,7 +20,8 @@
            #:vector-vector-dot-product
            #:shuffle-sequence
            #:generate-random-sequence
-           #:dimensions))
+           #:dimensions
+           #:one-hot-encode))
 
 (in-package :src/array/array)
 
@@ -177,3 +178,14 @@
 (defun generate-random-sequence (length)
   "Generate a random sequence"
   (alexandria:shuffle (map 'vector #'identity (loop :for i :from 0 :below length :collect i))))
+
+(defun one-hot-encode (value max-values)
+  "Generated a one-hot encoded vector with one at position value and zero elsewhere."
+  (assert (< value max-values) nil "Value position ~a must be less than maximum number of values ~d"
+          value max-values)
+  (let* ((encoded (make-vector max-values)))
+    (setf (aref encoded value) 1.0)
+    encoded))
+
+
+
