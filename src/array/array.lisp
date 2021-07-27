@@ -220,6 +220,6 @@
         (format t "~&Train-x data size = ~5d" (length train-x))
         (format t "~&Train-y data size = ~5d" (length train-y))
         (format t "~&Test-y data size  = ~5d" (length test-x))
-        (format t "~&Test-y data size  = ~5d" (length test=y)))
+        (format t "~&Test-y data size  = ~5d" (length test-y)))
       (values train-x train-y test-x test-y))))
 
