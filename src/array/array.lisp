@@ -186,9 +186,10 @@
 
 (defun one-hot-encode (value max-values)
   "Generated a one-hot encoded vector with one at position value and zero elsewhere."
-  (assert (< value max-values) nil "Value position ~a must be less than maximum number of values ~d"
-          value max-values)
-  (let* ((encoded (make-vector max-values)))
+  (let* ((value (if (vectorp value) (aref value 0) value))
+         (encoded (make-vector max-values)))
+    (assert (< value max-values) nil "Value position ~a must be less than maximum number of values ~d"
+            value max-values)
     (setf (aref encoded value) 1.0)
     encoded))
 
