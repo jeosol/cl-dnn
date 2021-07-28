@@ -214,7 +214,7 @@
 (defun nn-model-one-hidden-layer (train-x train-y n-h &key
                                                         (batch-size 32) (num-epochs 10000)
                                                         valid-x valid-y
-                                                        (print-cost nil))
+                                                        (print-output-p nil))
   "Run the one-hidden layer neural newtwork model.
   Arguments:
   X              -- dataset of shape (n_x, number of examples) (n_x dimension of each sample)
