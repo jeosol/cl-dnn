@@ -259,10 +259,12 @@
                (setf parameters (update-parameters-one-hidden-layer parameters grads learning-rate))
                ;; compute accuracy of the validation data using the current network parameters
                (when (and valid-x valid-y)
-                 )
-               (when print-cost
-                 (format t "Epoch ~5d of ~5d: Cost after iterations ~5d: ~18,12f~&" k num-epochs
-                         iter-counter cost))))
+                 (let* ((predictions))
+                   (setf predictions (forward-propagation-one-hidden-layer valid-x parameters))
+                   (setf validation-accuracy (compute-accuracy predictions valid-y))))
+               (when print-output-p
+                 (format t "Epoch ~5d of ~5d: Cost after iterations ~5d: ~18,12f~&~a" k num-epochs
+                         iter-counter cost (if validation-accuracy validation-accuracy "")))))
     ;; Return final parameters
     ;(values parameters (reverse cost-history))
     ))
