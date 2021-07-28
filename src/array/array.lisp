@@ -197,6 +197,15 @@
        (loop :for index :across shuffle-indices
              :collect (aref data index))))
 
+(defun argmax (vector-1d)
+  "Return the index of the maximum element in the 1d vector."
+  (let* ((index 0))
+    (loop :for i :from 1 :below (length vector-1d)
+          :do
+             (when (> (aref vector-1d i) (aref vector-1d index))
+               (setf index i)))
+    index))
+
 (defun slice-data (data start end shuffle-indices)
   "Extract data from index start to end and get the index of the data from shuffle-indices."
   (map 'vector #'identity
