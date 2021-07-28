@@ -216,18 +216,18 @@
 
 (defun train-test-split (x-data y-data &optional (test-fraction 0.10) (print-p t))
   "Split the training and test data with TEST-FRACTION for test"
-  (let* ((num-rows (length x-data)))
-    (assert (= (length x-data) (length y-data)) nil "Length of x-data ~d must be equal to y-data"
+  (let* ((num-data (num-cols x-data)))
+    (assert (= num-data (length y-data)) nil "Length of x-data ~d must be equal to y-data"
             (length x-data) (length y-data))
-    (let* ((shuffle-indices (generate-random-sequence num-rows))
+    (let* ((shuffle-indices (generate-random-sequence num-data))
            (x-data (shuffle-data x-data shuffle-indices))
            (y-data (shuffle-data y-data shuffle-indices))
-           (num-test-data (floor (* test-fraction num-rows)))
-           (split-index (- num-rows num-test-data))
+           (num-test-data (floor (* test-fraction num-data)))
+           (split-index (- num-data num-test-data))
            (train-x (slice-data x-data 0 split-index shuffle-indices))
            (train-y (slice-data y-data 0 split-index shuffle-indices))
-           (test-x  (slice-data x-data split-index num-rows shuffle-indices))
-           (test-y  (slice-data y-data split-index num-rows shuffle-indices)))
+           (test-x  (slice-data x-data split-index num-data shuffle-indices))
+           (test-y  (slice-data y-data split-index num-data shuffle-indices)))
       (when print-p
         (format t "~&Train-x data size = ~5d" (length train-x))
         (format t "~&Train-y data size = ~5d" (length train-y))
