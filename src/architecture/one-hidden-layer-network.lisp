@@ -226,7 +226,8 @@
          batch-indices (mini-batch-counter 0) (epoch 1)
          (iter-counter 0)
          shuffle-indices
-         (learning-rate 1.2) (decay-rate 1.0))
+         (learning-rate 1.2) (decay-rate 1.0)
+         (validation-accuracy nil))
     ;; Get dimensions for the input and output layers
     (setf (values n-x dummy n-y) (layer-sizes train-x train-y n-h))
     ;; Get shuffled indices
@@ -264,7 +265,9 @@
                    (setf validation-accuracy (compute-accuracy predictions valid-y))))
                (when print-output-p
                  (format t "Epoch ~5d of ~5d: Cost after iterations ~5d: ~18,12f~&~a" k num-epochs
-                         iter-counter cost (if validation-accuracy validation-accuracy "")))))
+                         iter-counter cost
+                         (if validation-accuracy
+                             (format nil "accuracy = ~6,3f" validation-accuracy) "")))))
     ;; Return final parameters
     ;(values parameters (reverse cost-history))
     ))
