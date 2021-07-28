@@ -197,14 +197,17 @@
 
    Returns:
    accuracy -- accuracy expressed as fraction"
+  ;; (format t "~%Computing accuracy: dimensions predicted-labels=~d, dimensions actual-labels~d"
+  ;;         (dimensions predicted-labels) (dimensions actual-labels))
   (assert (= (length predicted-labels) (length actual-labels))
           nil "The length of predicted and actual label data are not equal")
-  (let* ((m (length predicted-labels))
+  (let* ((m (num-cols predicted-labels))
          (correct 0)
          (pred-label) (true-label))
     (dotimes (i m)
       (setf pred-label (argmax (aref predicted-labels i))
             true-label (argmax (aref actual-labels i)))
+      ;(print (list "accuracy-info = " i pred-label true-label))
       (when (= pred-label true-label)
         (incf correct)))
     (float  (/ correct m))))
