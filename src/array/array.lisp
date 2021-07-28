@@ -25,7 +25,8 @@
            #:get-batch-data
            #:shuffle-data
            #:slice-data
-           #:train-test-split))
+           #:train-test-split
+           #:argmax))
 
 (in-package :src/array/array)
 
