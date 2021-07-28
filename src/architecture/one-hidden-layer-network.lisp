@@ -175,17 +175,18 @@
 ;;; Determine batch parameters
 (defun get-batch-start-end-indices (num-samples batch-size)
   "Return a list with elementthe start and end indices"
-  (let* ((num-full-batches (floor (/ num-samples batch-size)))
+  (let* ((num-batches (floor (/ num-samples batch-size)))
          (start-end-indices))
-    (loop :for i :from 0 :below num-full-batches
+    (loop :for i :from 0 :below num-batches
           :for start :from 0 :by batch-size
           :for end   :from batch-size by batch-size
           :do
              (push (list start end) start-end-indices))
-    (unless (= (* num-full-batches batch-size) num-samples)
-      (push (list (* num-full-batches batch-size) num-samples)
-            start-end-indices))
-    (reverse start-end-indices)))
+    (unless (= (* num-batches batch-size) num-samples)
+      (push (list (* num-batches batch-size) num-samples)
+            start-end-indices)
+      (incf num-batches))
+    (values (reverse start-end-indices) num-batches)))
 
 ;; Compute accuracy
 (defun compute-accuracy (predicted-labels actual-labels)
