@@ -216,8 +216,8 @@
 
 (defun train-test-split (x-data y-data &optional (test-fraction 0.10) (print-p t))
   "Split the training and test data with TEST-FRACTION for test"
-  (let* ((num-data (num-cols x-data)))
-    (assert (= num-data (length y-data)) nil "Length of x-data ~d must be equal to y-data"
+  (let* ((num-data (num-rows x-data)))
+    (assert (= num-data (length y-data)) nil "Length of x-data ~d must be equal to y-data ~d"
             (length x-data) (length y-data))
     (let* ((shuffle-indices (generate-random-sequence num-data))
            (x-data (shuffle-data x-data shuffle-indices))
