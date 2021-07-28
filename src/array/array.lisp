@@ -43,7 +43,7 @@
 
 (defun make-vector (num-elements)
   "Create a vector with NUM-ELEMENTS."
-  (make-array num-elements :element-type 'single-float :initial-element 0.0))
+  (make-array num-elements :element-type 'number :initial-element 0.0))
 
 (defun make-matrix (num-rows num-cols)
   "Create a matrix of size NUM-ROWS by NUM-COLS."
