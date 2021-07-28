@@ -14,12 +14,13 @@
                  (:module "activations"
                   :components
                   ((:file "activations")))
+                 (:module "architecture"
+                  :components
+                  ((:file :one-hidden-layer-network)))
                  (:module "examples"
                   :components
                   ((:file "mnist-utils")))
-                 (:module "architecture"
-                  :components
-                  ((:file :one-hidden-layer-network))))))
+                 )))
   :description "CL-DNN - Implementation of Deep Neural Networks using Common Lisp"
   :in-order-to ((test-op (test-op "cl-dnn/tests"))))
 
