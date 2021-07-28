@@ -187,6 +187,29 @@
             start-end-indices))
     (reverse start-end-indices)))
 
+;; Compute accuracy
+(defun compute-accuracy (predicted-labels actual-labels)
+  "Compute the accuracy of the predicted labels
+
+   Arguments:
+   predicted-labels -- labels as predicted by the network
+   true-labels -- 'True' labels vector of shape (1, number of examples)
+
+   Returns:
+   accuracy -- accuracy expressed as fraction"
+  (assert (= (length predicted-labels) (length actual-labels))
+          nil "The length of predicted and actual label data are not equal")
+  (let* ((m (length predicted-labels))
+         (correct 0)
+         (pred-label) (true-label))
+    (dotimes (i m)
+      (setf pred-label (argmax (aref predicted-labels i))
+            true-label (argmax (aref actual-labels i)))
+      (when (= pred-label true-label)
+        (incf correct)))
+    (float  (/ correct m))))
+
+
 ;;; Neural network model with one hidden layer
 (defun nn-model-one-hidden-layer (train-x train-y n-h &key
                                                         (batch-size 32) (num-epochs 10000)
