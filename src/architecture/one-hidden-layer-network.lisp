@@ -199,7 +199,7 @@
    accuracy -- accuracy expressed as fraction"
   ;; (format t "~%Computing accuracy: dimensions predicted-labels=~d, dimensions actual-labels~d"
   ;;         (dimensions predicted-labels) (dimensions actual-labels))
-  (assert (= (length predicted-labels) (length actual-labels))
+  (assert (= (num-cols predicted-labels) (num-cols actual-labels))
           nil "The length of predicted and actual label data are not equal")
   (let* ((m (num-cols predicted-labels))
          (correct 0)
